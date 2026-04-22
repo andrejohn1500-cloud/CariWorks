@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
-
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
@@ -11,20 +10,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<_Slide> _slides = [
-    _Slide(icon: Icons.work_outline_rounded, title: "Find Jobs Across
-The Caribbean", subtitle: "Browse hundreds of full-time, part-time and contract jobs from SVG to Jamaica and beyond.", color: Color(0xFF5B8DB8)),
-    _Slide(icon: Icons.handyman_outlined, title: "Post and Find
-Freelance Gigs", subtitle: "Hire skilled tradespeople, designers, tutors and more or offer your own services.", color: Color(0xFFD4A843)),
-    _Slide(icon: Icons.people_outline_rounded, title: "Connect With
-Local Employers", subtitle: "Message employers directly, track your applications and grow your Caribbean career.", color: Color(0xFF55A375)),
+  final List<_Slide> _slides = const [
+    _Slide(icon: Icons.work_outline_rounded, title: 'Find Jobs Across The Caribbean', subtitle: 'Browse full-time, part-time and contract jobs from SVG to Jamaica and beyond.', color: Color(0xFF5B8DB8)),
+    _Slide(icon: Icons.handyman_outlined, title: 'Post and Find Freelance Gigs', subtitle: 'Hire skilled tradespeople, designers, tutors and more or offer your own services.', color: Color(0xFFD4A843)),
+    _Slide(icon: Icons.people_outline_rounded, title: 'Connect With Local Employers', subtitle: 'Message employers directly, track your applications and grow your Caribbean career.', color: Color(0xFF55A375)),
   ];
 
   void _nextPage() {
     if (_currentPage < 2) {
       _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
     } else {
-      Navigator.pushReplacementNamed(context, "/login");
+      Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
@@ -38,8 +34,8 @@ Local Employers", subtitle: "Message employers directly, track your applications
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, "/login"),
-                child: const Text("Skip", style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 15)),
+                onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                child: const Text('Skip', style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 15)),
               ),
             ),
             Expanded(
@@ -55,18 +51,14 @@ Local Employers", subtitle: "Message employers directly, track your applications
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 140,
-                          height: 140,
-                          decoration: BoxDecoration(
-                            color: slide.color.withOpacity(0.12),
-                            shape: BoxShape.circle,
-                          ),
+                          width: 140, height: 140,
+                          decoration: BoxDecoration(color: slide.color.withOpacity(0.12), shape: BoxShape.circle),
                           child: Icon(slide.icon, size: 72, color: slide.color),
                         ),
                         const SizedBox(height: 48),
-                        Text(slide.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF2D3436), height: 1.3)),
+                        Text(slide.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF2D3436), height: 1.3)),
                         const SizedBox(height: 20),
-                        Text(slide.subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, color: Color(0xFF636E72), height: 1.6)),
+                        Text(slide.subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: Color(0xFF636E72), height: 1.6)),
                       ],
                     ),
                   );
@@ -90,17 +82,11 @@ Local Employers", subtitle: "Message employers directly, track your applications
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36),
               child: SizedBox(
-                width: double.infinity,
-                height: 56,
+                width: double.infinity, height: 56,
                 child: ElevatedButton(
                   onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5B8DB8),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                  child: Text(_currentPage == 2 ? "Get Started" : "Next", style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5B8DB8), foregroundColor: Colors.white, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+                  child: Text(_currentPage == 2 ? 'Get Started' : 'Next', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
