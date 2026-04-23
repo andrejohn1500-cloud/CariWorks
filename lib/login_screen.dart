@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [BoxShadow(color: const Color(0xFF5B8DB8).withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 6))],
                   ),
-                  child: const Center(child: Text('CJ', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white))),
+                  child: const Center(child: Text('CW', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white))),
                 ),
               ),
               const SizedBox(height: 32),

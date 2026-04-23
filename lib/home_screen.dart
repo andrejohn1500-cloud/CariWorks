@@ -62,7 +62,7 @@ class HomeFeedTab extends StatelessWidget {
                 Container(
                   width: 36, height: 36,
                   decoration: BoxDecoration(color: const Color(0xFF5B8DB8), borderRadius: BorderRadius.circular(10)),
-                  child: const Center(child: Text('CJ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13))),
+                  child: const Center(child: Text('CW', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13))),
                 ),
                 const SizedBox(width: 10),
                 const Text('CariWorks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
