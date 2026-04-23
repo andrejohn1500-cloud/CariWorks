@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
               const Text('Welcome Back', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
               const SizedBox(height: 8),
-              const Text('Sign in to your CariHub account', style: TextStyle(fontSize: 15, color: Color(0xFF636E72))),
+              const Text('Sign in to your CariWorks account', style: TextStyle(fontSize: 15, color: Color(0xFF636E72))),
               const SizedBox(height: 40),
               _buildLabel('Email Address'),
               const SizedBox(height: 8),
