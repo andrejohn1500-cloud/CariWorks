@@ -302,3 +302,27 @@ class HomeFeedTab extends StatelessWidget {
   }
 }
 
+
+class PostTab extends StatelessWidget {
+  const PostTab({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const SafeArea(child: Center(child: Text('Post a Job or Gig Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
+  }
+}
+
+class MessagesTab extends StatelessWidget {
+  const MessagesTab({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const SafeArea(child: Center(child: Text('Messages Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
+  }
+}
+
+class ProfileTab extends StatelessWidget {
+  const ProfileTab({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const SafeArea(child: Center(child: Text('Profile Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
+  }
+}
