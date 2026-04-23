@@ -65,7 +65,7 @@ class HomeFeedTab extends StatelessWidget {
                   child: const Center(child: Text('CJ', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13))),
                 ),
                 const SizedBox(width: 10),
-                const Text('CariHub', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+                const Text('CariWorks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
               ],
             ),
             actions: [
@@ -302,34 +302,3 @@ class HomeFeedTab extends StatelessWidget {
   }
 }
 
-class SearchTab extends StatelessWidget {
-  const SearchTab({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const SafeArea(child: Center(child: Text('Search Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
-  }
-}
-
-class PostTab extends StatelessWidget {
-  const PostTab({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const SafeArea(child: Center(child: Text('Post a Job or Gig Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
-  }
-}
-
-class MessagesTab extends StatelessWidget {
-  const MessagesTab({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const SafeArea(child: Center(child: Text('Messages Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
-  }
-}
-
-class ProfileTab extends StatelessWidget {
-  const ProfileTab({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const SafeArea(child: Center(child: Text('Profile Coming Soon', style: TextStyle(color: Color(0xFF636E72), fontSize: 16))));
-  }
-}
