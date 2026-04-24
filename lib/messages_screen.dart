@@ -7,6 +7,7 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
+  final _allMessages = <String, List<Map<String, dynamic>>>{};
   final _conversations = [
     {
       'name': 'TechSVG Ltd',
@@ -190,20 +191,32 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   void _openChat(BuildContext context, Map<String, dynamic> c) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => _ChatScreen(conversation: c)));
+    final key = c['name'] as String;
+    if (!_allMessages.containsKey(key)) {
+      _allMessages[key] = [
+        {'text': 'Hi, we saw your application for the \${c['job']} position.', 'mine': false, 'time': '9:30 AM'},
+        {'text': 'Thank you! I am very interested in the role.', 'mine': true, 'time': '9:32 AM'},
+        {'text': c['lastMessage'] as String, 'mine': false, 'time': c['time'] as String},
+      ];
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (_) => _ChatScreen(
+      conversation: c,
+      messages: _allMessages[key]!,
+    )));
   }
 }
 
 class _ChatScreen extends StatefulWidget {
   final Map<String, dynamic> conversation;
-  const _ChatScreen({required this.conversation});
+  final List<Map<String, dynamic>> messages;
+  const _ChatScreen({required this.conversation, required this.messages});
   @override
   State<_ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<_ChatScreen> {
   final _controller = TextEditingController();
-  final _messages = <Map<String, dynamic>>[];
+  late List<Map<String, dynamic>> _messages;
 
   @override
   void initState() {
@@ -281,7 +294,9 @@ class _ChatScreenState extends State<_ChatScreen> {
             ),
           ),
           // Input bar
-          Container(
+          SafeArea(
+          top: false,
+          child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             color: Colors.white,
             child: Row(
