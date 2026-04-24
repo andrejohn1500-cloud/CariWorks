@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,116 +10,131 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _isLoading = false;
+  bool _loading = false;
+  bool _obscure = true;
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showError('Please fill in all fields');
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      final res = await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      if (res.user != null) {
+        if (mounted) Navigator.pushReplacementNamed(context, '/home');
+      }
+    } on AuthException catch (e) {
+      _showError(e.message);
+    } catch (e) {
+      _showError('Something went wrong. Please try again.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
-  void _login() {
-    setState(() => _isLoading = true);
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() => _isLoading = false);
-      Navigator.pushReplacementNamed(context, '/home');
-    });
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), backgroundColor: Colors.red),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF8F5),
+      backgroundColor: const Color(0xFFFFFAF5),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
+          padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 48),
-              Center(
-                child: Container(
-                  width: 72, height: 72,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF5B8DB8),
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [BoxShadow(color: const Color(0xFF5B8DB8).withOpacity(0.3), blurRadius: 16, offset: const Offset(0, 6))],
+              const Text('Welcome Back', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87)),
+              const SizedBox(height: 8),
+              const Text('Log in to your CariWorks account', style: TextStyle(fontSize: 15, color: Colors.black45)),
+              const SizedBox(height: 32),
+              const Text('Email', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'your@email.com',
+                  prefixIcon: const Icon(Icons.email_outlined, color: Colors.black38),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Password', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _passwordController,
+                obscureText: _obscure,
+                decoration: InputDecoration(
+                  hintText: 'Your password',
+                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.black38),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined, color: Colors.black38),
+                    onPressed: () => setState(() => _obscure = !_obscure),
                   ),
-                  child: const Center(child: Text('CW', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white))),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => _showForgotPassword(),
+                  child: const Text('Forgot Password?', style: TextStyle(color: Color(0xFF5B8DB8), fontWeight: FontWeight.w600)),
                 ),
               ),
               const SizedBox(height: 32),
-              const Text('Welcome Back', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-              const SizedBox(height: 8),
-              const Text('Sign in to your CariWorks account', style: TextStyle(fontSize: 15, color: Color(0xFF636E72))),
-              const SizedBox(height: 40),
-              _buildLabel('Email Address'),
-              const SizedBox(height: 8),
-              _buildTextField(controller: _emailController, hint: 'you@example.com', icon: Icons.email_outlined, keyboardType: TextInputType.emailAddress),
-              const SizedBox(height: 20),
-              _buildLabel('Password'),
-              const SizedBox(height: 8),
-              _buildPasswordField(),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Forgot Password?', style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 14)),
-                ),
-              ),
-              const SizedBox(height: 24),
               SizedBox(
-                width: double.infinity, height: 56,
+                width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isLoading ? null : _login,
+                  onPressed: _loading ? null : _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5B8DB8),
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   ),
-                  child: _isLoading
-                    ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
-                    : const Text('Sign In', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  child: _loading
+                      ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                      : const Text('Log In', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
               ),
-              const SizedBox(height: 24),
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Color(0xFFE8E4DE))),
-                  Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('or', style: TextStyle(color: Color(0xFF636E72), fontSize: 14))),
-                  Expanded(child: Divider(color: Color(0xFFE8E4DE))),
-                ],
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity, height: 56,
-                child: OutlinedButton.icon(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFE8E4DE), width: 1.5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    backgroundColor: Colors.white,
-                  ),
-                  icon: const Icon(Icons.g_mobiledata_rounded, size: 28, color: Color(0xFF5B8DB8)),
-                  label: const Text('Continue with Google', style: TextStyle(fontSize: 15, color: Color(0xFF2D3436), fontWeight: FontWeight.w600)),
-                ),
-              ),
-              const SizedBox(height: 36),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Don\'t have an account? ', style: TextStyle(color: Color(0xFF636E72), fontSize: 15)),
+                  const Text("Don't have an account? ", style: TextStyle(color: Colors.black54)),
                   GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, '/register'),
-                    child: const Text('Sign Up', style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 15, fontWeight: FontWeight.bold)),
+                    onTap: () => Navigator.pushReplacementNamed(context, '/register'),
+                    child: const Text('Sign Up', style: TextStyle(color: Color(0xFF5B8DB8), fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -126,56 +142,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2D3436)));
-  }
-
-  Widget _buildTextField({required TextEditingController controller, required String hint, required IconData icon, TextInputType keyboardType = TextInputType.text}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8E4DE), width: 1.5),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))],
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        style: const TextStyle(fontSize: 15, color: Color(0xFF2D3436)),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Color(0xFFB2BEC3)),
-          prefixIcon: Icon(icon, color: const Color(0xFF5B8DB8), size: 20),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  void _showForgotPassword() {
+    final ctrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Reset Password'),
+        content: TextField(
+          controller: ctrl,
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(hintText: 'Enter your email'),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE8E4DE), width: 1.5),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))],
-      ),
-      child: TextField(
-        controller: _passwordController,
-        obscureText: _obscurePassword,
-        style: const TextStyle(fontSize: 15, color: Color(0xFF2D3436)),
-        decoration: InputDecoration(
-          hintText: 'Enter your password',
-          hintStyle: const TextStyle(color: Color(0xFFB2BEC3)),
-          prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF5B8DB8), size: 20),
-          suffixIcon: IconButton(
-            icon: Icon(_obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined, color: const Color(0xFF636E72), size: 20),
-            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () async {
+              if (ctrl.text.isNotEmpty) {
+                await Supabase.instance.client.auth.resetPasswordForEmail(ctrl.text.trim());
+                if (mounted) Navigator.pop(context);
+                if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Password reset email sent!'), backgroundColor: Color(0xFF5B8DB8)),
+                );
+              }
+            },
+            child: const Text('Send'),
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        ),
+        ],
       ),
     );
   }
