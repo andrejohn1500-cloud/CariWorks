@@ -1,35 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SearchTab extends StatefulWidget {
-  const SearchTab({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
   @override
-  State<SearchTab> createState() => _SearchTabState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchTabState extends State<SearchTab> with SingleTickerProviderStateMixin {
+class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final _searchController = TextEditingController();
   String _query = '';
-
-  final List<Map<String,String>> jobs = const [
-    {'title':'Web Developer','company':'TechSVG Ltd','location':'Kingstown, SVG','type':'Full-Time','salary':r'$2,500/mo'},
-    {'title':'Electrician','company':'PowerPro TT','location':'Port of Spain, TT','type':'Contract','salary':r'$800/wk'},
-    {'title':'Marketing Officer','company':'Caribbean Brands','location':'Bridgetown, BB','type':'Full-Time','salary':r'$3,000/mo'},
-    {'title':'Nurse','company':'Milton Cato Hospital','location':'Kingstown, SVG','type':'Full-Time','salary':r'$2,000/mo'},
-    {'title':'Teacher','company':'SVG Grammar School','location':'Kingstown, SVG','type':'Full-Time','salary':r'$2,200/mo'},
-  ];
-
-  final List<Map<String,String>> gigs = const [
-    {'title':'Logo Design','seller':'Marcus D.','price':r'From $50','rating':'4.9'},
-    {'title':'Roof Repair','seller':'Roy Construction','price':r'From $200','rating':'5.0'},
-    {'title':'CXC Maths Tutoring','seller':'Miss Clarke','price':r'From $30/hr','rating':'4.8'},
-    {'title':'Photography','seller':'Shawn Pics','price':r'From $100','rating':'4.7'},
-  ];
+  List<Map<String, dynamic>> _jobs = [];
+  List<Map<String, dynamic>> _gigs = [];
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchAll();
   }
 
   @override
@@ -39,22 +29,39 @@ class _SearchTabState extends State<SearchTab> with SingleTickerProviderStateMix
     super.dispose();
   }
 
-  List<Map<String,String>> get filteredJobs {
-    if (_query.isEmpty) return jobs;
+  Future<void> _fetchAll() async {
+    setState(() => _loading = true);
+    try {
+      final jobs = await Supabase.instance.client
+          .from('listings').select().eq('type', 'Job').order('created_at', ascending: false);
+      final gigs = await Supabase.instance.client
+          .from('listings').select().eq('type', 'Gig').order('created_at', ascending: false);
+      if (mounted) setState(() {
+        _jobs = List<Map<String, dynamic>>.from(jobs);
+        _gigs = List<Map<String, dynamic>>.from(gigs);
+        _loading = false;
+      });
+    } catch (e) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  List<Map<String, dynamic>> get _filteredJobs {
+    if (_query.isEmpty) return _jobs;
     final q = _query.toLowerCase();
-    return jobs.where((j) =>
-      j['title']!.toLowerCase().contains(q) ||
-      j['company']!.toLowerCase().contains(q) ||
-      j['location']!.toLowerCase().contains(q)
+    return _jobs.where((j) =>
+      (j['title'] ?? '').toLowerCase().contains(q) ||
+      (j['company'] ?? '').toLowerCase().contains(q) ||
+      (j['location'] ?? '').toLowerCase().contains(q)
     ).toList();
   }
 
-  List<Map<String,String>> get filteredGigs {
-    if (_query.isEmpty) return gigs;
+  List<Map<String, dynamic>> get _filteredGigs {
+    if (_query.isEmpty) return _gigs;
     final q = _query.toLowerCase();
-    return gigs.where((g) =>
-      g['title']!.toLowerCase().contains(q) ||
-      g['seller']!.toLowerCase().contains(q)
+    return _gigs.where((g) =>
+      (g['title'] ?? '').toLowerCase().contains(q) ||
+      (g['company'] ?? '').toLowerCase().contains(q)
     ).toList();
   }
 
@@ -64,16 +71,13 @@ class _SearchTabState extends State<SearchTab> with SingleTickerProviderStateMix
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16,16,16,0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             color: Colors.white,
             child: Column(
               children: [
                 Container(
                   height: 48,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  decoration: BoxDecoration(color: const Color(0xFFF5F5F5), borderRadius: BorderRadius.circular(12)),
                   child: TextField(
                     controller: _searchController,
                     onChanged: (v) => setState(() => _query = v),
@@ -98,91 +102,76 @@ class _SearchTabState extends State<SearchTab> with SingleTickerProviderStateMix
             ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                filteredJobs.isEmpty
-                  ? const Center(child: Text('No jobs found'))
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: filteredJobs.length,
-                      itemBuilder: (ctx, i) {
-                        final j = filteredJobs[i];
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: const Color(0xFFEFE8E4)),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0,2))],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(j['title']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-                              const SizedBox(height: 4),
-                              Text(j['company']!, style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
-                              const SizedBox(height: 8),
-                              Row(children: [
-                                const Icon(Icons.location_on_outlined, size: 13, color: Color(0xFFB2BEC3)),
-                                const SizedBox(width: 3),
-                                Text(j['location']!, style: const TextStyle(fontSize: 12, color: Color(0xFFB2BEC3))),
-                                const Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(color: const Color(0xFF5B8DB8).withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
-                                  child: Text(j['type']!, style: const TextStyle(fontSize: 11, color: Color(0xFF5B8DB8), fontWeight: FontWeight.w600)),
-                                ),
-                              ]),
-                              const SizedBox(height: 6),
-                              Text(j['salary']!, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                filteredGigs.isEmpty
-                  ? const Center(child: Text('No gigs found'))
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: filteredGigs.length,
-                      itemBuilder: (ctx, i) {
-                        final g = filteredGigs[i];
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: const Color(0xFFEFE8E4)),
-                            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0,2))],
-                          ),
-                          child: Row(children: [
-                            Expanded(child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(g['title']!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-                                const SizedBox(height: 4),
-                                Text(g['seller']!, style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
-                                const SizedBox(height: 6),
-                                Row(children: [
-                                  const Icon(Icons.star_rounded, size: 14, color: Color(0xFFFFD443)),
-                                  const SizedBox(width: 3),
-                                  Text(g['rating']!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                                ]),
-                              ],
-                            )),
-                            Text(g['price']!, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF5B8DB8))),
-                          ]),
-                        );
-                      },
-                    ),
-              ],
-            ),
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : TabBarView(
+                    controller: _tabController,
+                    children: [
+                      RefreshIndicator(
+                        onRefresh: _fetchAll,
+                        child: _filteredJobs.isEmpty
+                            ? const Center(child: Text('No jobs found', style: TextStyle(color: Colors.grey)))
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: _filteredJobs.length,
+                                itemBuilder: (ctx, i) => _buildJobCard(_filteredJobs[i]),
+                              ),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _fetchAll,
+                        child: _filteredGigs.isEmpty
+                            ? const Center(child: Text('No gigs found', style: TextStyle(color: Colors.grey)))
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: _filteredGigs.length,
+                                itemBuilder: (ctx, i) => _buildGigCard(_filteredGigs[i]),
+                              ),
+                      ),
+                    ],
+                  ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildJobCard(Map<String, dynamic> j) => Container(
+    margin: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFEFEFE8)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))]),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(j['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+      const SizedBox(height: 4),
+      Text(j['company'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
+      const SizedBox(height: 8),
+      Row(children: [
+        const Icon(Icons.location_on_outlined, size: 13, color: Color(0xFFB2BEC3)),
+        const SizedBox(width: 3),
+        Text(j['location'] ?? '', style: const TextStyle(fontSize: 12, color: Color(0xFFB2BEC3))),
+        const Spacer(),
+        Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: const Color(0xFF5B8DB8).withOpacity(0.1), borderRadius: BorderRadius.circular(8)), child: Text(j['job_type'] ?? '', style: const TextStyle(fontSize: 11, color: Color(0xFF5B8DB8), fontWeight: FontWeight.w600))),
+      ]),
+      const SizedBox(height: 6),
+      Text(j['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+    ]),
+  );
+
+  Widget _buildGigCard(Map<String, dynamic> g) => Container(
+    margin: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14), border: Border.all(color: const Color(0xFFEFEFE8)), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))]),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(g['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+      const SizedBox(height: 4),
+      Text(g['company'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
+      const SizedBox(height: 8),
+      Row(children: [
+        const Icon(Icons.star_rounded, size: 14, color: Color(0xFFD4A843)),
+        const SizedBox(width: 3),
+        Text(g['job_type'] ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+        const Spacer(),
+        Text(g['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF5B8DB8))),
+      ]),
+    ]),
+  );
 }
