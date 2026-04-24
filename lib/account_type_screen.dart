@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AccountTypeScreen extends StatefulWidget {
   const AccountTypeScreen({super.key});
@@ -8,21 +9,47 @@ class AccountTypeScreen extends StatefulWidget {
 
 class _AccountTypeScreenState extends State<AccountTypeScreen> {
   String? _selectedType;
+  bool _loading = false;
 
-  void _continue() {
+  Future<void> _continue() async {
     if (_selectedType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select an account type to continue.'), backgroundColor: Color(0xFFD66A5E)),
+        const SnackBar(
+          content: Text('Please select an account type to continue.'),
+          backgroundColor: Color(0xFFD66A5E),
+        ),
       );
       return;
     }
-    Navigator.pushReplacementNamed(context, '/home');
+
+    setState(() => _loading = true);
+
+    try {
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user != null) {
+        await Supabase.instance.client.from('profiles').upsert({
+          'id': user.id,
+          'account_type': _selectedType,
+          'email': user.email,
+          'updated_at': DateTime.now().toIso8601String(),
+        });
+      }
+      if (mounted) Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF8F5),
+      backgroundColor: const Color(0xFFFFFAF8),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 36, 28, 24),
@@ -40,16 +67,19 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
               _buildTypeCard(type: 'both', icon: Icons.swap_horiz_rounded, title: 'Both', subtitle: 'I am looking for work and also hiring or posting gigs at the same time.', color: const Color(0xFF55A375)),
               const Spacer(),
               SizedBox(
-                width: double.infinity, height: 56,
+                width: double.infinity,
+                height: 56,
                 child: ElevatedButton(
-                  onPressed: _continue,
+                  onPressed: _loading ? null : _continue,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5B8DB8),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: const Text('Continue', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  child: _loading
+                      ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                      : const Text('Continue', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
