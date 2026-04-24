@@ -1,3 +1,4 @@
+import 'help_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -69,7 +70,18 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   _menuItem(Icons.notifications_outlined, 'Notifications', context),
                   _menuItem(Icons.lock_outline, 'Privacy & Security', context),
-                  _menuItem(Icons.help_outline, 'Help & Support', context),
+                  GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HelpScreen())),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+            child: const ListTile(
+              leading: Icon(Icons.help_outline, color: Color(0xFF5B8DB8)),
+              title: Text('Help & Support', style: TextStyle(fontWeight: FontWeight.w500)),
+              trailing: Icon(Icons.chevron_right, color: Colors.black26),
+            ),
+          ),
+        ),
                   const SizedBox(height: 12),
                   _menuItem(Icons.logout, 'Log Out', context, color: Colors.red),
                   const SizedBox(height: 32),
