@@ -1,3 +1,5 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'supabase_config.dart';
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
 import 'onboarding_screen.dart';
@@ -6,7 +8,12 @@ import 'register_screen.dart';
 import 'account_type_screen.dart';
 import 'home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: supabaseUrl,
+    anonKey: supabaseAnonKey,
+  );
   runApp(const CariJobsApp());
 }
 
@@ -23,7 +30,6 @@ class CariJobsApp extends StatelessWidget {
           seedColor: const Color(0xFF5B8DB8),
           primary: const Color(0xFF5B8DB8),
           secondary: const Color(0xFFD4A843),
-          background: const Color(0xFFFAF8F5),
           surface: const Color(0xFFFFFFFF),
         ),
         scaffoldBackgroundColor: const Color(0xFFFAF8F5),
