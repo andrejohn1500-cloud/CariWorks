@@ -1,3 +1,4 @@
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'messages_screen.dart';
@@ -154,12 +155,12 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
 
   Widget _buildCategories() {
     final cats = [
-      {'icon': Icons.handyman_outlined, 'label': 'Trades', 'color': const Color(0xFFD4A843)},
+      {'icon': Symbols.handyman, 'label': 'Trades', 'color': const Color(0xFFD4A843)},
       {'icon': Icons.code_rounded, 'label': 'Tech', 'color': const Color(0xFF5B8DB8)},
-      {'icon': Icons.brush_rounded, 'label': 'Creative', 'color': const Color(0xFFD66A5E)},
-      {'icon': Icons.school_rounded, 'label': 'Education', 'color': const Color(0xFF55A375)},
-      {'icon': Icons.campaign_rounded, 'label': 'Marketing', 'color': const Color(0xFF9B59B6)},
-      {'icon': Icons.restaurant_rounded, 'label': 'Food', 'color': const Color(0xFFE67E22)},
+      {'icon': Symbols.brush, 'label': 'Creative', 'color': const Color(0xFFD66A5E)},
+      {'icon': Symbols.school, 'label': 'Education', 'color': const Color(0xFF55A375)},
+      {'icon': Symbols.campaign, 'label': 'Marketing', 'color': const Color(0xFF9B59B6)},
+      {'icon': Symbols.restaurant, 'label': 'Food', 'color': const Color(0xFFE67E22)},
     ];
     return SizedBox(
       height: 90,
@@ -185,7 +186,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF5B8DB8), Color(0xFF4A7BA7)]), borderRadius: BorderRadius.circular(16)),
     child: Row(children: [
-      const Icon(Icons.bolt_rounded, color: Colors.white, size: 28),
+      const Icon(Symbols.bolt, color: Colors.white, size: 28),
       const SizedBox(width: 12),
       const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text('Urgently Hiring!', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
@@ -220,7 +221,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE8E4DE), width: 1.5), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))]),
     child: Row(children: [
-      Container(width: 52, height: 52, decoration: BoxDecoration(color: const Color(0xFFD4A843).withOpacity(0.12), borderRadius: BorderRadius.circular(14)), child: const Icon(Icons.brush_rounded, color: Color(0xFFD4A843), size: 26)),
+      Container(width: 52, height: 52, decoration: BoxDecoration(color: const Color(0xFFD4A843).withOpacity(0.12), borderRadius: BorderRadius.circular(14)), child: const Icon(Symbols.brush, color: Color(0xFFD4A843), size: 26)),
       const SizedBox(width: 14),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(g['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
