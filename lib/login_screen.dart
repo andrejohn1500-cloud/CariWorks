@@ -160,9 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
               if (ctrl.text.isNotEmpty) {
                 await Supabase.instance.client.auth.resetPasswordForEmail(ctrl.text.trim());
                 if (mounted) Navigator.pop(context);
-                if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Password reset email sent!'), backgroundColor: Color(0xFF5B8DB8)),
-                );
+                  );
+                }
               }
             },
             child: const Text('Send'),
