@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -14,14 +15,76 @@ class _PostScreenState extends State<PostScreen> {
   final _salaryController = TextEditingController();
   final _descController = TextEditingController();
   String _jobType = 'Full-Time';
+  bool _loading = false;
 
   final _types = ['Job', 'Gig'];
   final _jobTypes = ['Full-Time', 'Part-Time', 'Contract', 'Remote'];
 
   @override
+  void dispose() {
+    _titleController.dispose();
+    _companyController.dispose();
+    _locationController.dispose();
+    _salaryController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_titleController.text.trim().isEmpty ||
+        _locationController.text.trim().isEmpty ||
+        _descController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all required fields.'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+
+    try {
+      final user = Supabase.instance.client.auth.currentUser;
+      await Supabase.instance.client.from('listings').insert({
+        'user_id': user?.id,
+        'type': _type,
+        'title': _titleController.text.trim(),
+        'company': _companyController.text.trim(),
+        'location': _locationController.text.trim(),
+        'salary': _salaryController.text.trim(),
+        'job_type': _jobType,
+        'description': _descController.text.trim(),
+        'created_at': DateTime.now().toIso8601String(),
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$_type posted successfully! 🎉'),
+            backgroundColor: const Color(0xFF5B8DB8),
+          ),
+        );
+        _titleController.clear();
+        _companyController.clear();
+        _locationController.clear();
+        _salaryController.clear();
+        _descController.clear();
+        setState(() => _type = 'Job');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFAF5),
+      backgroundColor: const Color(0xFFFFFFFAF5),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -49,8 +112,7 @@ class _PostScreenState extends State<PostScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(t, textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                            color: sel ? Colors.white : Colors.black54)),
+                          style: TextStyle(fontWeight: FontWeight.bold, color: sel ? Colors.white : Colors.black54)),
                       ),
                     ),
                   );
@@ -97,17 +159,15 @@ class _PostScreenState extends State<PostScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Listing submitted! (Backend coming soon)'), backgroundColor: Color(0xFF5B8DB8)),
-                  );
-                },
+                onPressed: _loading ? null : _submit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF5B8DB8),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
-                child: Text('Post ${_type}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                child: _loading
+                    ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                    : Text('Post $_type', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
               ),
             ),
             const SizedBox(height: 32),
