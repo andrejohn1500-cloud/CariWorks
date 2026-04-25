@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'my_listings_screen.dart';
 import 'saved_jobs_screen.dart';
 import 'notifications_screen.dart';
@@ -210,6 +211,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
+                if (_profile?['account_type'] == 'jobseeker')
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.star, color: Colors.white),
+                      label: const Text('Go Premium - USD 3/month', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFD700),
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: () async {
+                        final supabase = Supabase.instance.client;
+                        await supabase.from('premium_seekers').insert({
+                          'user_id': supabase.auth.currentUser!.id,
+                          'status': 'pending',
+                        });
+                        final uri = Uri.parse('https://www.paypal.com/ncp/payment/S9XKCJPMUSK56');
+                        if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      },
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
