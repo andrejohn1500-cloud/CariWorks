@@ -37,9 +37,9 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
     setState(() => _loading = true);
     try {
       final jobs = await Supabase.instance.client
-          .from('listings').select().eq('type', 'Job').order('created_at', ascending: false);
+          .from('listings').select().eq('type', 'Employer').order('created_at', ascending: false);
       final gigs = await Supabase.instance.client
-          .from('listings').select().eq('type', 'Gig').order('created_at', ascending: false);
+          .from('listings').select().eq('type', 'Worker / Freelancer').order('created_at', ascending: false);
       if (mounted) setState(() {
         _jobs = List<Map<String, dynamic>>.from(jobs);
         _gigs = List<Map<String, dynamic>>.from(gigs);
@@ -102,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   labelColor: const Color(0xFF5B8DB8),
                   unselectedLabelColor: const Color(0xFF9E9E9E),
                   indicatorColor: const Color(0xFF5B8DB8),
-                  tabs: const [Tab(text: 'Jobs'), Tab(text: 'Gigs')],
+                  tabs: const [Tab(text: 'Jobs'), Tab(text: 'Services')],
                 ),
               ],
             ),
@@ -126,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                       RefreshIndicator(
                         onRefresh: _fetchAll,
                         child: _filteredGigs.isEmpty
-                            ? const Center(child: Text('No gigs found', style: TextStyle(color: Colors.grey)))
+                            ? const Center(child: Text('No services found', style: TextStyle(color: Colors.grey)))
                             : ListView.builder(
                                 padding: const EdgeInsets.all(16),
                                 itemCount: _filteredGigs.length,

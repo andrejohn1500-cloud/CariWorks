@@ -8,7 +8,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-  String _type = 'Job';
+  String _type = 'Employer';
   final _titleController = TextEditingController();
   final _companyController = TextEditingController();
   final _locationController = TextEditingController();
@@ -17,7 +17,7 @@ class _PostScreenState extends State<PostScreen> {
   String _jobType = 'Full-Time';
   bool _loading = false;
 
-  final _types = ['Job', 'Gig'];
+  final _types = ['Employer', 'Worker / Freelancer'];
   final _jobTypes = ['Full-Time', 'Part-Time', 'Contract', 'Remote'];
 
   String? _accountType;
@@ -37,10 +37,10 @@ class _PostScreenState extends State<PostScreen> {
         .eq('id', user.id)
         .maybeSingle();
     if (mounted && data != null) {
-      final at = data['account_type'] ?? 'Job Seeker';
+      final at = data['account_type'] ?? 'Worker / Freelancer';
       setState(() {
         _accountType = at;
-        _type = at == 'Employer' ? 'Job' : 'Gig';
+        _type = at == 'Employer' ? 'Employer' : 'Worker / Freelancer';
       });
     }
   }
@@ -93,7 +93,7 @@ class _PostScreenState extends State<PostScreen> {
         _locationController.clear();
         _salaryController.clear();
         _descController.clear();
-        setState(() => _type = 'Job');
+        setState(() => _type = 'Employer');
       }
     } catch (e) {
       if (mounted) {
@@ -148,13 +148,13 @@ class _PostScreenState extends State<PostScreen> {
             _label('${_type} Title *'),
             _field(_titleController, 'e.g. Senior Web Developer'),
             const SizedBox(height: 16),
-            _label(_type == 'Job' ? 'Company Name *' : 'Your Name / Brand *'),
+            _label(_type == 'Employer' ? 'Company Name *' : 'Your Name / Brand *'),
             _field(_companyController, 'e.g. TechSVG Ltd'),
             const SizedBox(height: 16),
             _label('Location *'),
             _field(_locationController, 'e.g. Kingstown, SVG'),
             const SizedBox(height: 16),
-            _label(_type == 'Job' ? 'Salary (per month)' : 'Rate (per hour/project)'),
+            _label(_type == 'Employer' ? 'Salary (per month)' : 'Rate (per hour/project)'),
             _field(_salaryController, 'e.g. \$2,500'),
             const SizedBox(height: 16),
             _label('Type'),

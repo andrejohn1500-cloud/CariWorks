@@ -77,7 +77,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
       final gigs = await Supabase.instance.client
           .from('listings')
           .select()
-          .eq('type', 'Gig')
+          .eq('type', 'Worker / Freelancer')
           .order('created_at', ascending: false)
           .limit(5);
       if (mounted) setState(() { _jobs = List<Map<String, dynamic>>.from(jobs); _gigs = List<Map<String, dynamic>>.from(gigs); _loading = false; });
@@ -125,7 +125,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
                     else if (_jobs.isEmpty) const Center(child: Padding(padding: EdgeInsets.all(16), child: Text('No jobs posted yet. Be the first!', style: TextStyle(color: Colors.grey))))
                     else ..._jobs.map((j) => Padding(padding: const EdgeInsets.only(bottom: 12), child: _buildJobCard(j))),
                     const SizedBox(height: 24),
-                    _buildSectionHeader('Featured Gigs'),
+                    _buildSectionHeader('Featured Services'),
                     const SizedBox(height: 14),
                     if (_loading) const SizedBox()
                     else if (_gigs.isEmpty) const Center(child: Padding(padding: EdgeInsets.all(16), child: Text('No gigs posted yet.', style: TextStyle(color: Colors.grey))))
