@@ -11,6 +11,10 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   late TabController _tabController;
   final _searchController = TextEditingController();
   String _query = '';
+  String _selectedCategory = 'All';
+  String _selectedCountry = 'All';
+  final List<String> _categories = ['All', 'IT', 'Construction', 'Healthcare', 'Education', 'Retail', 'Hospitality', 'Agriculture', 'Finance', 'Other'];
+  final List<String> _countries = ['All', 'Saint Vincent', 'Barbados', 'Trinidad', 'Jamaica', 'Grenada', 'Saint Lucia', 'Antigua', 'Dominica'];
   List<Map<String, dynamic>> _jobs = [];
   List<Map<String, dynamic>> _gigs = [];
   bool _loading = true;
@@ -50,9 +54,11 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
     if (_query.isEmpty) return _jobs;
     final q = _query.toLowerCase();
     return _jobs.where((j) =>
-      (j['title'] ?? '').toLowerCase().contains(q) ||
+      ((j['title'] ?? '').toLowerCase().contains(q) ||
       (j['company'] ?? '').toLowerCase().contains(q) ||
-      (j['location'] ?? '').toLowerCase().contains(q)
+      (j['location'] ?? '').toLowerCase().contains(q)) &&
+      (_selectedCategory == 'All' || (j['category'] ?? '') == _selectedCategory) &&
+      (_selectedCountry == 'All' || (j['location'] ?? '').contains(_selectedCountry))
     ).toList();
   }
 
