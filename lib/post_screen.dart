@@ -20,6 +20,31 @@ class _PostScreenState extends State<PostScreen> {
   final _types = ['Job', 'Gig'];
   final _jobTypes = ['Full-Time', 'Part-Time', 'Contract', 'Remote'];
 
+  String? _accountType;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAccountType();
+  }
+
+  Future<void> _loadAccountType() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return;
+    final data = await Supabase.instance.client
+        .from('profiles')
+        .select('account_type')
+        .eq('id', user.id)
+        .maybeSingle();
+    if (mounted && data != null) {
+      final at = data['account_type'] ?? 'Job Seeker';
+      setState(() {
+        _accountType = at;
+        _type = at == 'Employer' ? 'Job' : 'Gig';
+      });
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
