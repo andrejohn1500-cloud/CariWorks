@@ -52,8 +52,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       children: [
                         Container(
                           width: 140, height: 140,
-                          decoration: BoxDecoration(color: slide.color.withOpacity(0.12), shape: BoxShape.circle),
-                          child: Icon(slide.icon, size: 72, color: slide.color),
+                          
+                          
                         ),
                         const SizedBox(height: 48),
                         Text(slide.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF2D3436), height: 1.3)),
