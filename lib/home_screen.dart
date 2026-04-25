@@ -228,7 +228,15 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
       Container(width: 52, height: 52, decoration: BoxDecoration(color: const Color(0xFF5B8DB8).withOpacity(0.12), borderRadius: BorderRadius.circular(14)), child: const Icon(Icons.business_center_rounded, color: Color(0xFF5B8DB8), size: 26)),
       const SizedBox(width: 14),
       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(j['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+        Row(children: [
+              if (j['featured'] == true) Container(
+                margin: const EdgeInsets.only(right: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(color: const Color(0xFFFFD700), borderRadius: BorderRadius.circular(4)),
+                child: const Text('Featured', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black)),
+              ),
+              Expanded(child: Text(j['title'] ?? '', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3436)))),
+            ]),
         const SizedBox(height: 3),
         Text(j['company'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
         const SizedBox(height: 6),

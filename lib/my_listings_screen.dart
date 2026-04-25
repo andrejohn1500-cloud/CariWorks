@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyListingsScreen extends StatefulWidget {
@@ -58,10 +59,20 @@ class _MyListingsScreenState extends State<MyListingsScreen> {
                         contentPadding: const EdgeInsets.all(12),
                         title: Text(j['title'] ?? '', style: const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text('${j['category'] ?? ''} • ${j['location'] ?? ''}'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
-                          onPressed: () => _deleteListing(j['id'].toString()),
-                        ),
+                        trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                          IconButton(
+                            icon: Icon(j['featured'] == true ? Icons.star : Icons.star_border, color: const Color(0xFFFFD700)),
+                            tooltip: 'Feature this listing',
+                            onPressed: () async {
+                              final uri = Uri.parse('https://www.paypal.com/ncp/payment/YEMJYJZAPB66C');
+                              if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline, color: Colors.red),
+                            onPressed: () => _deleteListing(j['id'].toString()),
+                          ),
+                        ]),
                       ),
                     );
                   },
