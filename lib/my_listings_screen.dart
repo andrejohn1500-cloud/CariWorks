@@ -78,6 +78,15 @@ class _MyListingsScreenState extends State<MyListingsScreen> {
                             icon: const Icon(Icons.delete_outline, color: Colors.red),
                             onPressed: () => _deleteListing(j['id'].toString()),
                           ),
+                              IconButton(
+                                icon: const Icon(Icons.workspace_premium, color: Color(0xFF1565C0)),
+                                tooltip: "Premium Post - USD 10",
+                                onPressed: () async {
+                                  await _supabase.from("premium_posts").insert({"listing_id": j["id"].toString(), "user_id": _supabase.auth.currentUser!.id, "status": "pending"});
+                                  final uri = Uri.parse("https://www.paypal.com/ncp/payment/359PF493G56BG");
+                                  if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                },
+                              ),
                         ]),
                       ),
                     );
