@@ -7,6 +7,7 @@ import 'messages_screen.dart';
 import 'post_screen.dart';
 import 'profile_screen.dart';
 import 'search_screen.dart';
+import 'listing_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -232,7 +233,9 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
     ]),
   );
 
-  Widget _buildJobCard(Map<String, dynamic> j) => Container(
+  Widget _buildJobCard(Map<String, dynamic> j) => GestureDetector(
+    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ListingDetailScreen(listing: j))),
+    child: Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE8E4DE), width: 1.5), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))]),
     child: Row(children: [
@@ -260,8 +263,11 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
       ]),
     ]),
   );
+  );
 
-  Widget _buildGigCard(Map<String, dynamic> g) => Container(
+  Widget _buildGigCard(Map<String, dynamic> g) => GestureDetector(
+    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ListingDetailScreen(listing: g))),
+    child: Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE8E4DE), width: 1.5), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8, offset: const Offset(0, 2))]),
     child: Row(children: [
@@ -276,6 +282,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
       ])),
       Text(g['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFFD4A843))),
     ]),
+  );
   );
 }
 
