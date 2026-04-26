@@ -180,7 +180,7 @@ class _PostScreenState extends State<PostScreen> {
                 contentPadding: const EdgeInsets.all(16),
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32 + MediaQuery.of(context).padding.bottom),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -195,7 +195,7 @@ class _PostScreenState extends State<PostScreen> {
                     : Text(_type == 'Employer' ? 'Post Job' : 'Post My Service', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32 + MediaQuery.of(context).padding.bottom),
           ],
         ),
       ),
