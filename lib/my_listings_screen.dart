@@ -71,7 +71,7 @@ class _MyListingsScreenState extends State<MyListingsScreen> {
                     'status': 'pending',
                   });
                               final uri = Uri.parse('https://www.paypal.com/ncp/payment/YEMJYJZAPB66C');
-                              if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
                             },
                           ),
                           IconButton(
@@ -84,7 +84,7 @@ class _MyListingsScreenState extends State<MyListingsScreen> {
                                 onPressed: () async {
                                   await _supabase.from("premium_posts").insert({"listing_id": j["id"].toString(), "user_id": _supabase.auth.currentUser!.id, "status": "pending"});
                                   final uri = Uri.parse("https://www.paypal.com/ncp/payment/359PF493G56BG");
-                                  if (await canLaunchUrl(uri)) await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                  await launchUrl(uri, mode: LaunchMode.externalApplication);
                                 },
                               ),
                         ]),
