@@ -31,6 +31,7 @@ dependencies:
   material_symbols_icons: ^4.2719.3
   image_picker: ^1.1.2
   url_launcher: ^6.3.0
+  flutter_native_splash: ^2.3.9
   flutter_launcher_icons: ^0.13.1
   flutter:
     sdk: flutter
@@ -43,6 +44,7 @@ dependencies:
   app_links: ^7.0.0
 
 dev_dependencies:
+  flutter_native_splash: ^2.3.9
   flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
@@ -100,3 +102,9 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: 'assets/images/icon.png'
+
+flutter_native_splash:
+  color: '#1a73e8'
+  image: assets/images/icon.png
+  android: true
+  ios: true
