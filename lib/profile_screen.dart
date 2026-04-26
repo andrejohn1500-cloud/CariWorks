@@ -260,11 +260,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 12),
                         _menuItem(Icons.notifications_outlined, 'Notifications', context),
                         _menuItem(Icons.lock_outline, 'Privacy Policy', context, onTap: () async {
-                      final uri = Uri.parse('https://doc-hosting.flycricket.io/cariworks-privacy-policy/dcfcb6a9-589b-4c1c-9d4b-9f55d48730aa/privacy');
+                      final uri = Uri.parse('https://cariworks.co/privacy.html');
                       await launchUrl(uri, mode: LaunchMode.externalApplication);
                     }),
                     _menuItem(Icons.description_outlined, 'Terms of Use', context, onTap: () async {
-                      final uri = Uri.parse('https://doc-hosting.flycricket.io/cariworks-terms-of-use/bfd7c3e9-6f9b-4cc4-a35d-0c61fa92f74f/terms');
+                      final uri = Uri.parse('https://cariworks.co/terms.html');
                       await launchUrl(uri, mode: LaunchMode.externalApplication);
                     }),
                         GestureDetector(
