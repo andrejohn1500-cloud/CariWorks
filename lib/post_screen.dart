@@ -192,7 +192,7 @@ class _PostScreenState extends State<PostScreen> {
                 ),
                 child: _loading
                     ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                    : Text(_accountType == 'Employer' ? 'Post Job' : 'Post My Service', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                    : Text(_type == 'Employer' ? 'Post Job' : 'Post My Service', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
               ),
             ),
             const SizedBox(height: 32),
