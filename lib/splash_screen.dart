@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     // Train rushing toward you
-    _trainCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 3000));
+    _trainCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 4500));
     _trainScale = Tween<double>(begin: 0.02, end: 18.0).animate(
       CurvedAnimation(parent: _trainCtrl, curve: Curves.easeInCubic),
     );
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     // Carriages sweep past
-    _carriageCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
+    _carriageCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200));
     _carriageOffset = Tween<double>(begin: 1.0, end: -7.0).animate(
       CurvedAnimation(parent: _carriageCtrl, curve: Curves.easeInCubic),
     );
@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _runSequence() async {
     await Future.delayed(const Duration(milliseconds: 300));
     _trainCtrl.forward();
-    await Future.delayed(const Duration(milliseconds: 2600));
+    await Future.delayed(const Duration(milliseconds: 4000));
     _carriageCtrl.forward();
     await Future.delayed(const Duration(milliseconds: 1100));
     _logoCtrl.forward();
