@@ -97,16 +97,16 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.08) : Colors.white,
+          color: isSelected ? color.withValues(alpha: 0.08) : Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: isSelected ? color : const Color(0xFFE8E4DE), width: isSelected ? 2 : 1.5),
-          boxShadow: [BoxShadow(color: isSelected ? color.withOpacity(0.12) : Colors.black.withOpacity(0.04), blurRadius: isSelected ? 16 : 8, offset: const Offset(0, 4))],
+          boxShadow: [BoxShadow(color: isSelected ? color.withValues(alpha: 0.12) : Colors.black.withValues(alpha: 0.04), blurRadius: isSelected ? 16 : 8, offset: const Offset(0, 4))],
         ),
         child: Row(
           children: [
             Container(
               width: 56, height: 56,
-              decoration: BoxDecoration(color: color.withOpacity(0.12), borderRadius: BorderRadius.circular(14)),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(14)),
               child: Icon(icon, color: color, size: 28),
             ),
             const SizedBox(width: 16),

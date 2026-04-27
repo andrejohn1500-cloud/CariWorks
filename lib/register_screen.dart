@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _field(_confirmController, 'Re-enter password', Icons.lock_outline, obscure: true),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _selectedCountry,
+                  initialValue: _selectedCountry,
                   decoration: InputDecoration(
                     labelText: 'Country',
                     prefixIcon: const Icon(Icons.public, color: Color(0xFF5B8DB8)),

@@ -50,7 +50,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         subtitle: Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         value: val,
-        activeColor: const Color(0xFF5B8DB8),
+        activeThumbColor: const Color(0xFF5B8DB8),
         onChanged: onChanged,
       ),
     );
