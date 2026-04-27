@@ -3,8 +3,9 @@ import 'listing_detail_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key, this.initialTab});
+  const SearchScreen({super.key, this.initialTab, this.initialCategory});
   final String? initialTab;
+  final String? initialCategory;
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
