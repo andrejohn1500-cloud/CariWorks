@@ -173,7 +173,9 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
         itemCount: cats.length,
         itemBuilder: (context, i) {
           final cat = cats[i];
-          return Container(
+          return GestureDetector(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen(initialTab: 'jobs', initialCategory: cat['label'] as String))),
+            child: Container(
             margin: const EdgeInsets.only(right: 12),
             child: Column(children: [
               ClipRRect(
@@ -191,6 +193,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
               const SizedBox(height: 6),
               Text(cat['label'] as String, style: const TextStyle(fontSize: 12, color: Color(0xFF636E72), fontWeight: FontWeight.w500)),
             ]),
+          ),
           );
         },
       ),
