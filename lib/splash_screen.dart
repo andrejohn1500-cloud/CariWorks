@@ -1,82 +1,74 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
-  static const int cols = 3, rows = 3;
-  static const double logoSize = 260.0;
-
-  late List<AnimationController> _pieceControllers;
-  late List<Animation<Offset>> _slideAnims;
-  late AnimationController _scaleController;
-  late Animation<double> _scaleAnim;
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _logoController;
+  late AnimationController _textController;
   late AnimationController _exitController;
+  late Animation<double> _scaleAnim;
+  late Animation<double> _logoFadeAnim;
+  late Animation<double> _textFadeAnim;
+  late Animation<Offset> _textSlideAnim;
   late Animation<double> _exitAnim;
 
   @override
   void initState() {
     super.initState();
-    final rng = Random();
 
-    _pieceControllers = List.generate(
-      rows * cols,
-      (_) => AnimationController(vsync: this, duration: const Duration(milliseconds: 450)),
-    );
+    _logoController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    _textController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    _exitController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
 
-    _slideAnims = List.generate(rows * cols, (i) {
-      final dx = (rng.nextDouble() * 6 - 3);
-      final dy = (rng.nextDouble() * 6 - 3);
-      return Tween<Offset>(begin: Offset(dx, dy), end: Offset.zero).animate(
-        CurvedAnimation(parent: _pieceControllers[i], curve: Curves.easeOutBack),
-      );
-    });
-
-    _scaleController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _scaleAnim = Tween<double>(begin: 1.0, end: 1.06).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.easeOut),
-    );
-
-    _exitController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _scaleAnim = Tween<double>(begin: 0.3, end: 1.0).animate(
+        CurvedAnimation(parent: _logoController, curve: Curves.elasticOut));
+    _logoFadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _logoController,
+            curve: const Interval(0.0, 0.5, curve: Curves.easeIn)));
+    _textFadeAnim = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _textController, curve: Curves.easeIn));
+    _textSlideAnim =
+        Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
+            CurvedAnimation(parent: _textController, curve: Curves.easeOut));
     _exitAnim = Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(parent: _exitController, curve: Curves.easeIn),
-    );
+        CurvedAnimation(parent: _exitController, curve: Curves.easeIn));
 
     _runSequence();
   }
 
   Future<void> _runSequence() async {
-    for (int i = 0; i < _pieceControllers.length; i++) {
-      await Future.delayed(const Duration(milliseconds: 90));
-      if (mounted) _pieceControllers[i].forward();
-    }
+    await Future.delayed(const Duration(milliseconds: 200));
+    if (mounted) _logoController.forward();
     await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) await _scaleController.forward();
-    if (mounted) await _scaleController.reverse();
-    await Future.delayed(const Duration(milliseconds: 900));
+    if (mounted) _textController.forward();
+    await Future.delayed(const Duration(milliseconds: 1200));
     if (mounted) await _exitController.forward();
-    if (mounted) {
-      final session = Supabase.instance.client.auth.currentSession;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => session != null ? const HomeScreen() : const LoginScreen(),
-        ),
-      );
-    }
+    if (!mounted) return;
+    final session = Supabase.instance.client.auth.currentSession;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            session != null ? const HomeScreen() : const LoginScreen(),
+      ),
+    );
   }
 
   @override
   void dispose() {
-    for (var c in _pieceControllers) c.dispose();
-    _scaleController.dispose();
+    _logoController.dispose();
+    _textController.dispose();
     _exitController.dispose();
     super.dispose();
   }
@@ -86,67 +78,59 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     return FadeTransition(
       opacity: _exitAnim,
       child: Scaffold(
-        backgroundColor: const Color(0xFF1A6DB5),
+        backgroundColor: const Color(0xFF1565C0),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ScaleTransition(
-                scale: _scaleAnim,
-                child: SizedBox(
-                  width: logoSize,
-                  height: logoSize,
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: cols,
-                      mainAxisSpacing: 0,
-                      crossAxisSpacing: 0,
-                    ),
-                    itemCount: rows * cols,
-                    itemBuilder: (_, index) {
-                      final row = index ~/ cols;
-                      final col = index % cols;
-                      return SlideTransition(
-                        position: _slideAnims[index],
-                        child: ClipRect(
-                          child: Align(
-                            alignment: Alignment(
-                              -1.0 + col * 2.0 / (cols - 1),
-                              -1.0 + row * 2.0 / (rows - 1),
-                            ),
-                            widthFactor: 1.0 / cols,
-                            heightFactor: 1.0 / rows,
-                            child: Image.asset(
-                              'assets/images/icon.png',
-                              width: logoSize,
-                              height: logoSize,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+              FadeTransition(
+                opacity: _logoFadeAnim,
+                child: ScaleTransition(
+                  scale: _scaleAnim,
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
                         ),
-                      );
-                    },
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: Image.asset(
+                        'assets/images/icon.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 32),
-              const Text(
-                'CariWorks',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Jobs & Gigs for the Caribbean',
-                style: TextStyle(
-                  color: Color(0xFFB3D4F5),
-                  fontSize: 14,
-                  letterSpacing: 1,
+              SlideTransition(
+                position: _textSlideAnim,
+                child: FadeTransition(
+                  opacity: _textFadeAnim,
+                  child: const Column(
+                    children: [
+                      Text('CariWorks',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2)),
+                      SizedBox(height: 8),
+                      Text('Jobs & Gigs for the Caribbean',
+                          style: TextStyle(
+                              color: Color(0xFFBBDEFB),
+                              fontSize: 15,
+                              letterSpacing: 1)),
+                    ],
+                  ),
                 ),
               ),
             ],
