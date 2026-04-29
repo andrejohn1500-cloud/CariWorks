@@ -59,24 +59,25 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   }
 
   List<Map<String, dynamic>> get _filteredJobs {
-    if (_query.isEmpty) return _jobs;
     final q = _query.toLowerCase();
     return _jobs.where((j) =>
-      ((j['title'] ?? '').toLowerCase().contains(q) ||
-      (j['company'] ?? '').toLowerCase().contains(q) ||
-      (j['location'] ?? '').toLowerCase().contains(q)) &&
+      (q.isEmpty ||
+        (j['title'] ?? '').toLowerCase().contains(q) ||
+        (j['company'] ?? '').toLowerCase().contains(q) ||
+        (j['location'] ?? '').toLowerCase().contains(q)) &&
       (_selectedCategory == 'All' || (j['category'] ?? '') == _selectedCategory) &&
       (_selectedCountry == 'All' || (j['location'] ?? '').contains(_selectedCountry))
     ).toList();
   }
 
   List<Map<String, dynamic>> get _filteredGigs {
-    if (_query.isEmpty) return _gigs;
     final q = _query.toLowerCase();
     return _gigs.where((g) =>
-      (g['title'] ?? '').toLowerCase().contains(q) ||
-      (g['company'] ?? '').toLowerCase().contains(q)
-    ).where((g) => _selectedCategory == 'All' || (g['category'] ?? '') == _selectedCategory).toList();
+      (q.isEmpty ||
+        (g['title'] ?? '').toLowerCase().contains(q) ||
+        (g['company'] ?? '').toLowerCase().contains(q)) &&
+      (_selectedCategory == 'All' || (g['category'] ?? '') == _selectedCategory)
+    ).toList();
   }
 
   @override
