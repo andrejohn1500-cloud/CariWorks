@@ -80,6 +80,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
             .eq('featured', true)
             .order('created_at', ascending: false)
             .limit(10);
+      if (mounted) setState(() { _jobs = List<Map<String, dynamic>>.from(jobs); _gigs = List<Map<String, dynamic>>.from(gigs); _loading = false; });
     } catch (e) {
       if (mounted) setState(() => _loading = false);
     }
