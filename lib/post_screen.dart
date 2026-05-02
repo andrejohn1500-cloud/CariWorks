@@ -20,7 +20,7 @@ class _PostScreenState extends State<PostScreen> {
 
   final _types = ['Employer', 'Worker / Freelancer'];
   final _jobTypes = ['Full-Time', 'Part-Time', 'Contract', 'Remote'];
-  final _categories = ['Trades', 'Tech', 'Creative', 'Education', 'Marketing', 'Food'];
+  final _categories = ['Trades', 'Tech', 'Creative', 'Education', 'Marketing', 'Finance', 'Health', 'Hospitality', 'Other'];
 
   // ignore: unused_field
   String? _accountType;

@@ -99,10 +99,9 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: _buildHeader()),
-              SliverToBoxAdapter(child: _buildSearchBar()),
+              SliverToBoxAdapter(child: _buildHero()),
               SliverToBoxAdapter(child: _buildUrgentBanner()),
               SliverToBoxAdapter(child: _buildCategories()),
-              SliverToBoxAdapter(child: _buildOpportunities()),
               const SliverToBoxAdapter(child: SizedBox(height: 32)),
             ],
           ),
@@ -157,6 +156,54 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(color: Color(0x195B8DB8), borderRadius: BorderRadius.circular(8)),
             child: const Text('SVG', style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 12, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
+    ),
+  );
+
+
+  Widget _buildHero() => Container(
+    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+    height: 200,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.18), blurRadius: 20, offset: const Offset(0, 8))],
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(
+            'https://images.unsplash.com/photo-1580200764528-e6b13e39bbd7?w=900&q=80',
+            fit: BoxFit.cover,
+            loadingBuilder: (_, child, progress) => progress == null ? child
+                : Container(color: const Color(0xFF2C5F8A)),
+            errorBuilder: (_, __, ___) => Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [Color(0xFF1A3A5C), Color(0xFF5B8DB8)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.black.withValues(alpha: 0.55), Colors.transparent, Colors.black.withValues(alpha: 0.3)],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+              ),
+            ),
+          ),
+          const Positioned(
+            left: 20, right: 20, bottom: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Find Your Next', style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text('Caribbean Opportunity', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold, height: 1.2)),
+              ],
+            ),
           ),
         ],
       ),
