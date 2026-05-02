@@ -192,6 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   String get _accountTypeLabel {
+    if (_isPremium) return '⭐ Premium Member';
     final t = _profile?['account_type'] ?? '';
     if (t == 'seeker') return 'Job Seeker';
     if (t == 'employer') return 'Employer';
