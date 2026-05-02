@@ -1,4 +1,4 @@
-l canimport 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'listing_detail_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -53,14 +53,13 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
               .from('listings').select().eq('type', 'Employer')
               .order('created_at', ascending: false);
       final gigs = widget.recentOnly
-          ? await Supabase.instance.client
-              .from('listings')
-              .select()
-              .eq('type', 'Worker / Freelancer')
-              .gte('created_at', cutoff)
-              .order('created_at', ascending: false)
-          : await Supabase.instance.client
-              .from('listings').select().eq('type', 'Worker / Freelancer').order('created_at', ascending: false);
+        ? await Supabase.instance.client
+            .from('listings').select().eq('type', 'Worker / Freelancer')
+            .gte('created_at', cutoff)
+            .order('created_at', ascending: false)
+        : await Supabase.instance.client
+            .from('listings').select().eq('type', 'Worker / Freelancer')
+            .order('created_at', ascending: false);
       if (mounted) {
         setState(() {
         _jobs = List<Map<String, dynamic>>.from(jobs);
