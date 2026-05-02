@@ -256,7 +256,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 (_profile?['bio'] ?? '').toString(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
+                style: const TextStyle(color: Color(0xFF636E72), fontSize: 13),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
