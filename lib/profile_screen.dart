@@ -216,11 +216,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Text('$_accountTypeLabel · ${_profile?['location'] ?? 'Caribbean'}', style: const TextStyle(color: Colors.white70, fontSize: 14)),
                         const SizedBox(height: 16),
                         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          _statBox('Applications', _appCount.toString(), onTap: _goToApplications),
+                          _statBox('Applications', _appCount.toString()),
                           const SizedBox(width: 16),
-                          _statBox('Saved', _savedCount.toString(), onTap: _goToSaved),
+                          _statBox('Saved', _savedCount.toString()),
                           const SizedBox(width: 16),
-                          _statBox('Posted', _postedCount.toString(), onTap: _goToMyListings),
+                          _statBox('Posted', _postedCount.toString()),
                         ]),
                       ],
                     ),
@@ -273,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(height: 24),
                         const Text('Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black54)),
                         const SizedBox(height: 12),
-                        _menuItem(Icons.notifications_outlined, 'Notifications', context, onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notifications coming soon'), backgroundColor: Color(0xFF5B8DB8)))),
+                        _menuItem(Icons.notifications_outlined, 'Notifications', context, onTap: null),
                         _menuItem(Icons.lock_outline, 'Privacy Policy', context, onTap: () async {
                       final uri = Uri.parse('https://cariworks.co/privacy.html');
                       await launchUrl(uri, mode: LaunchMode.externalApplication);

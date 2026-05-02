@@ -133,7 +133,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
             ],
           ),
         ),
-        IconButton(icon: const Icon(Icons.notifications_outlined, color: Color(0xFF5B8DB8)), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.notifications_outlined, color: Color(0xFF5B8DB8)), onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Notifications coming soon!"), backgroundColor: Color(0xFF5B8DB8)))),
       ],
     ),
   );
@@ -442,6 +442,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
     ),
   );
 }
+
 
 
 class SearchTab extends StatelessWidget {
