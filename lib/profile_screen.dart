@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'listing_detail_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'my_listings_screen.dart';
 import 'package:image_picker/image_picker.dart';
