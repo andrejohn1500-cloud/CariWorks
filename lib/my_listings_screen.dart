@@ -90,6 +90,11 @@ class _MyListingsScreenState extends State<MyListingsScreen> {
                                   await launchUrl(uri, mode: LaunchMode.externalApplication);
                                 },
                               ),
+                      IconButton(
+                        icon: const Icon(Icons.people, color: Color(0xFF2E7D32)),
+                        tooltip: 'View Applicants',
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ApplicantsScreen(listingId: j['id'].toString(), listingTitle: j['title'] ?? ''))),
+                      ),
                         ]),
                       ),
                     );
