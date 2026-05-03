@@ -33,7 +33,10 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
         final profile = Map<String, dynamic>.from(map['profiles'] ?? {});
         profile['email'] = emailResult ?? '';
         map['profiles'] = profile;
-      } catch (_) {}
+        map['email_direct'] = emailResult ?? '';
+      } catch (e) {
+        map['email_direct'] = '';
+      }
       enriched.add(map);
     }
     setState(() { _applicants = enriched; _loading = false; });
@@ -88,7 +91,7 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
                     final a = _applicants[i];
                     final profile = a['profiles'] as Map<String, dynamic>? ?? {};
                     final name = profile['full_name'] ?? 'Unknown';
-                    final email = profile['email'] ?? '';
+                    final email = (a['email_direct'] ?? profile['email'] ?? '') as String;
                     final phone = profile['phone'] ?? '';
                     final country = profile['country'] ?? '';
                     final bio = profile['bio'] ?? '';
