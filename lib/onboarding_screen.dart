@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -7,118 +8,148 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _pageController = PageController();
+  final PageController _controller = PageController();
   int _currentPage = 0;
 
-  final List<_Slide> _slides = const [
-    _Slide(image: 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.jpg', title: 'Find Jobs Across The Caribbean', subtitle: 'Browse full-time, part-time and contract jobs from SVG to Jamaica and beyond.'),
-    _Slide(image: 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.jpg', title: 'Post & Find Services', subtitle: 'Hire skilled tradespeople, designers, tutors and more or offer your own services.'),
-    _Slide(image: 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.jpg', title: 'Connect With Local Employers', subtitle: 'Message employers directly, track your applications and grow your Caribbean career.'),
+  final List<Map<String, String>> _slides = [
+    {
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.png',
+      'title': 'Get Hired in the Caribbean',
+      'body': 'Connect with employers across the region who are actively looking for your skills. Whether you\'re fresh out of school or a seasoned professional, your next opportunity starts here.',
+    },
+    {
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.png',
+      'title': 'Every Skill Has a Place',
+      'body': 'From tradespeople and creatives to teachers and business professionals — CariWorks celebrates every kind of Caribbean worker. Post your service and let the work come to you.',
+    },
+    {
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.png',
+      'title': 'Apply, Post & Grow',
+      'body': 'Browse jobs, apply in seconds, and track your applications — all from your phone. Employers can post listings and find the right person fast. This is how the Caribbean works now.',
+    },
   ];
 
-  void _nextPage() {
-    if (_currentPage < 2) {
-      _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    for (final slide in _slides) {
-      precacheImage(NetworkImage(slide.image), context);
-    }
+  Future<void> _finish() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_done', true);
+    if (mounted) Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF8F5),
+      backgroundColor: const Color(0xFF1A1A2E),
       body: SafeArea(
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-                child: const Text('Skip', style: TextStyle(color: Color(0xFF5B8DB8), fontSize: 15)),
-              ),
-            ),
             Expanded(
               child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (i) => setState(() => _currentPage = i),
+                controller: _controller,
                 itemCount: _slides.length,
+                onPageChanged: (i) => setState(() => _currentPage = i),
                 itemBuilder: (context, i) {
                   final slide = _slides[i];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            slide.image,
-                            width: double.infinity,
-                            height: 260,
-                            fit: BoxFit.cover,
-                            errorBuilder: (ctx, e, st) => Container(
-                              height: 260,
-                              color: const Color(0xFFE8F0FE),
-                              child: const Icon(Icons.image_not_supported, size: 60, color: Color(0xFF5B8DB8)),
-                            ),
+                  return Column(
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: Image.network(
+                          slide['image']!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          loadingBuilder: (ctx, child, progress) =>
+                              progress == null ? child : const Center(child: CircularProgressIndicator(color: Colors.white)),
+                          errorBuilder: (_, __, ___) => Container(color: const Color(0xFF0F3460)),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(28),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                slide['title']!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                slide['body']!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFFB0BEC5),
+                                  fontSize: 15,
+                                  height: 1.6,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 40),
-                        Text(slide.title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF2D3436), height: 1.3)),
-                        const SizedBox(height: 16),
-                        Text(slide.subtitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, color: Color(0xFF636E72), height: 1.6)),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 },
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(3, (i) => AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                width: _currentPage == i ? 24 : 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: _currentPage == i ? const Color(0xFF5B8DB8) : const Color(0xFFE8E4DE),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              )),
-            ),
-            const SizedBox(height: 32),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5B8DB8), foregroundColor: Colors.white, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-                  child: Text(_currentPage == 2 ? 'Get Started' : 'Next', style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                ),
+              padding: const EdgeInsets.fromLTRB(28, 0, 28, 32),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(_slides.length, (i) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == i ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _currentPage == i ? const Color(0xFFFFD700) : Colors.white24,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    )),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_currentPage < _slides.length - 1) {
+                          _controller.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+                        } else {
+                          _finish();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF5C5C),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      child: Text(
+                        _currentPage < _slides.length - 1 ? 'Next' : 'Get Started',
+                        style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  if (_currentPage < _slides.length - 1) ...[
+                    const SizedBox(height: 12),
+                    TextButton(
+                      onPressed: _finish,
+                      child: const Text('Skip', style: TextStyle(color: Colors.white54, fontSize: 14)),
+                    ),
+                  ],
+                ],
               ),
             ),
-            const SizedBox(height: 36),
           ],
         ),
       ),
     );
   }
-}
-
-class _Slide {
-  final String image;
-  final String title;
-  final String subtitle;
-  const _Slide({required this.image, required this.title, required this.subtitle});
 }

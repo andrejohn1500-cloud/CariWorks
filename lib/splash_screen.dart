@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
@@ -52,12 +54,14 @@ class _SplashScreenState extends State<SplashScreen>
     if (mounted) _textController.forward();
     await Future.delayed(const Duration(milliseconds: 1200));
     if (mounted) await _exitController.forward();
+    final prefs = await SharedPreferences.getInstance();
+    final onboardingDone = prefs.getBool('onboarding_done') ?? false;
     final session = Supabase.instance.client.auth.currentSession;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-          session != null ? const HomeScreen() : const LoginScreen(),
+            ? const OnboardingScreen()
+            : session != null ? const HomeScreen() : const LoginScreen(),
       ),
     );
   }
