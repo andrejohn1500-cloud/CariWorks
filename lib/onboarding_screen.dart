@@ -13,18 +13,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> _slides = [
     {
-      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.png',
-      'title': 'Get Hired in the Caribbean',
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.jpg',
+      'title': 'Get Hired.',
       'body': 'Connect with employers across the region who are actively looking for your skills. Whether you\'re fresh out of school or a seasoned professional, your next opportunity starts here.',
     },
     {
-      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.png',
-      'title': 'Every Skill Has a Place',
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.jpg',
+      'title': 'Every Skill\nBelongs Here.',
       'body': 'From tradespeople and creatives to teachers and business professionals — CariWorks celebrates every kind of Caribbean worker. Post your service and let the work come to you.',
     },
     {
-      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.png',
-      'title': 'Apply, Post & Grow',
+      'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.jpg',
+      'title': 'Apply. Post.\nGrow.',
       'body': 'Browse jobs, apply in seconds, and track your applications — all from your phone. Employers can post listings and find the right person fast. This is how the Caribbean works now.',
     },
   ];
@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 24,
+                                  fontSize: 32,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 0.5,
                                 ),
@@ -85,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Color(0xFFB0BEC5),
-                                  fontSize: 15,
+                                  fontSize: 17,
                                   height: 1.6,
                                 ),
                               ),
