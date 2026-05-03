@@ -32,11 +32,20 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
   }
 
   Future<void> _updateStatus(String applicationId, String status) async {
-    await _supabase
-        .from('applications')
-        .update({'status': status})
-        .eq('id', applicationId);
-    await _fetchApplicants();
+    try {
+      await _supabase
+          .from('applications')
+          .update({'status': status})
+          .eq('id', applicationId);
+      await _fetchApplicants();
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Applicant $status'), backgroundColor: status == 'accepted' ? Colors.green : Colors.red),
+      );
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   @override
