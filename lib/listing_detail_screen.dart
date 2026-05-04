@@ -29,8 +29,8 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
         .select('id')
         .eq('user_id', user.id)
         .eq('listing_id', listingId)
-        .maybeSingle();
-    if (mounted) setState(() => _isApplied = res != null);
+        .limit(1);
+    if (mounted) setState(() => _isApplied = (res as List).isNotEmpty);
   }
 
   Future<void> _saveJob() async {
