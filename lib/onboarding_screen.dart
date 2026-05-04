@@ -16,7 +16,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.jpg',
       'title': 'Get Hired.',
-      'body': 'Connect with employers across the region who are actively looking for your skills. Whether you\'re fresh out of school or a seasoned professional, your next opportunity starts here.',
+      'body': 'Find jobs across the Caribbean. Fresh graduate or seasoned pro, your next opportunity starts here.',
     },
     {
       'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.jpg',
@@ -26,7 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'image': 'https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.jpg',
       'title': 'Apply. Post.\nGrow.',
-      'body': 'Apply in seconds. Post a listing in minutes. Track it all from your phone. This is how the Caribbean works now.',
+      'body': 'Apply in seconds. Post a listing in minutes. Track it all from your phone.',
     },
   ];
 
@@ -51,9 +51,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemBuilder: (context, i) {
                   final slide = _slides[i];
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        flex: 6,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.42,
                         child: CachedNetworkImage(
                           imageUrl: slide['image']!,
                           fit: BoxFit.contain,
@@ -63,13 +64,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 4,
                         child: Padding(
-                          padding: const EdgeInsets.all(28),
+                          padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 20),
                               Text(
                                 slide['title']!,
                                 textAlign: TextAlign.center,
@@ -77,17 +77,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   color: Colors.white,
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.5,
+                                  height: 1.2,
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
                               Text(
                                 slide['body']!,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Color(0xFFB0BEC5),
-                                  fontSize: 17,
-                                  height: 1.6,
+                                  fontSize: 16,
+                                  height: 1.5,
                                 ),
                               ),
                             ],
@@ -100,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 0, 28, 32),
+              padding: const EdgeInsets.fromLTRB(28, 8, 28, 28),
               child: Column(
                 children: [
                   Row(
@@ -116,7 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     )),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -139,7 +139,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   if (_currentPage < _slides.length - 1) ...[
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     TextButton(
                       onPressed: _finish,
                       child: const Text('Skip', style: TextStyle(color: Colors.white54, fontSize: 14)),
