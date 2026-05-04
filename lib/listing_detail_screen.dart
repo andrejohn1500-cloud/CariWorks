@@ -14,6 +14,25 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
   bool _isSaved = false;
   bool _isApplied = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _checkIfApplied();
+  }
+
+  Future<void> _checkIfApplied() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) return;
+    final listingId = widget.listing['id'] ?? '';
+    final res = await Supabase.instance.client
+        .from('applications')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('listing_id', listingId)
+        .maybeSingle();
+    if (mounted) setState(() => _isApplied = res != null);
+  }
+
   Future<void> _saveJob() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user == null) { _showSnack('Sign in to save listings', Colors.orange); return; }
