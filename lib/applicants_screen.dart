@@ -98,7 +98,7 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
                     final bio = profile['bio'] ?? '';
                     final status = (a['status'] ?? 'pending').toString();
                     final date = DateTime.tryParse(a['created_at'] ?? '');
-                    final dateStr = date != null ? '\${date.day}/\${date.month}/\${date.year}' : '';
+                    final dateStr = date != null ? '${date.day}/${date.month}/${date.year}' : '';
                     final statusColor = status == 'accepted' ? Colors.green : status == 'rejected' ? Colors.red : Colors.orange;
                     final statusLabel = status == 'accepted' ? '✓ Accepted' : status == 'rejected' ? '✗ Rejected' : '● Pending';
 
@@ -127,7 +127,7 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
                               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                 if (country.isNotEmpty) Text(country, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                                if (dateStr.isNotEmpty) Text('Applied \$dateStr', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                                if (dateStr.isNotEmpty) Text('Applied $dateStr', style: const TextStyle(fontSize: 11, color: Colors.grey)),
                               ])),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -190,7 +190,7 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
                                   onPressed: () async {
-                                    final uri = Uri.parse('mailto:\$email');
+                                    final uri = Uri.parse('mailto:$email');
                                     // ignore: deprecated_member_use
                                     if (await canLaunchUrl(uri)) await launchUrl(uri);
                                   },
