@@ -260,6 +260,7 @@ class _ApplyFormState extends State<ApplyForm> {
               TextField(
                 controller: _portfolioCtrl,
                 keyboardType: TextInputType.url,
+                scrollPadding: const EdgeInsets.only(bottom: 200),
                 decoration: InputDecoration(
                   hintText: 'https://yourportfolio.com',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
