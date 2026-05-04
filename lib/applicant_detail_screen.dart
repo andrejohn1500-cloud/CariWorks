@@ -233,7 +233,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                         const SizedBox(height: 12),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5B8DB8)),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () async { await launchUrl(Uri.parse('https://www.paypal.com/ncp/payment/359PF493G56BG'), mode: LaunchMode.externalApplication); },
                           child: const Text('Upgrade (\$10)', style: TextStyle(color: Colors.white)),
                         ),
                       ]),
