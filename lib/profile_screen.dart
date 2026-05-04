@@ -87,8 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _showEditProfile() async {
     final nameCtrl = TextEditingController(text: _profile?['full_name'] ?? '');
     final bioCtrl = TextEditingController(text: _profile?['bio'] ?? '');
-    final phoneCtrl = TextEditingController(text: _profile?['phone'] ?? '');
-    String? accountType = _profile?['account_type'];
     String? country = _profile?['country'] ?? '';
     final countries = ['Anguilla','Antigua and Barbuda','Aruba','Bahamas','Barbados','Belize','Bonaire','British Virgin Islands','Cayman Islands','Colombia','Costa Rica','Cuba','Curacao','Dominica','Dominican Republic','Grenada','Guadeloupe','Guatemala','Guyana','Haiti','Honduras','Jamaica','Martinique','Mexico','Montserrat','Nicaragua','Panama','Puerto Rico','Saba','Saint Barthelemy','Saint Kitts and Nevis','Saint Lucia','Saint Martin','Saint Vincent and the Grenadines','Sint Eustatius','Sint Maarten','Suriname','Trinidad and Tobago','Turks and Caicos','US Virgin Islands','Venezuela','Other'];
     await showModalBottomSheet(
@@ -363,8 +361,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _goToSaved() => Navigator.push(context, MaterialPageRoute(
     builder: (_) => _SavedListingsPage(title: 'Saved Jobs & Services', table: 'saved_jobs', emptyMsg: 'No saved listings yet.\nBookmark jobs you like!'),
   ));
-
-  void _goToMyListings() => Navigator.push(context, MaterialPageRoute(builder: (_) => const MyListingsScreen()));
 
   Widget _statBox(String label, String val, {VoidCallback? onTap}) => GestureDetector(
     onTap: onTap,
