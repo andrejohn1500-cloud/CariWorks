@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'apply_form.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -46,35 +45,23 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
     }
   }
 
-  Future<void> _applyJob() async {
-    final user = Supabase.instance.client.auth.currentUser;
-    if (user == null) { _showSnack('Sign in to apply', Colors.orange); return; }
-    final listingId = widget.listing['id'] ?? '';
-    try {
-      await Supabase.instance.client.from('applications').insert({'user_id': user.id, 'listing_id': listingId});
-      if (mounted) setState(() => _isApplied = true);
-    } catch (e) {
-      if (e.toString().contains('23505') || e.toString().contains('duplicate')) {
-        if (mounted) setState(() => _isApplied = true);
-      } else {
-        if (mounted) _showSnack('Error: $e', Colors.red);
-      }
-    }
-  }
 
   void _showSnack(String msg, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: color));
   }
 
-  Future<void> _handleApplyNow() async {
-    await _applyJob();
-    final email = widget.listing['contact_email'] ?? '';
-    if (email.isNotEmpty) {
-      final uri = Uri.parse('mailto:$email?subject=Application for ${widget.listing["title"]}');
-      await launchUrl(uri);
-    } else {
-      if (mounted) _showSnack('No contact info available', Colors.grey);
-    }
+  void _handleApplyNow() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ApplyForm(
+        listing: widget.listing,
+        onApplied: () {
+          if (mounted) setState(() => _isApplied = true);
+        },
+      ),
+    );
   }
 
   @override
