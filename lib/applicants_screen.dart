@@ -142,21 +142,6 @@ class _ApplicantsScreenState extends State<ApplicantsScreen> {
                             Text(bio, style: const TextStyle(fontSize: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
                           ],
                           const SizedBox(height: 12),
-                          Row(children: [
-                            Expanded(child: ElevatedButton.icon(
-                              icon: const Icon(Icons.check, size: 16, color: Colors.white),
-                              label: const Text('Accept', style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                              onPressed: () => _updateStatus(a['id'].toString(), 'accepted'),
-                            )),
-                            const SizedBox(width: 8),
-                            Expanded(child: ElevatedButton.icon(
-                              icon: const Icon(Icons.close, size: 16, color: Colors.white),
-                              label: const Text('Reject', style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                              onPressed: () => _updateStatus(a['id'].toString(), 'rejected'),
-                            )),
-                          ]),
                           const SizedBox(height: 8),
                           Row(children: [
                             if (email.isNotEmpty) Expanded(child: OutlinedButton.icon(
