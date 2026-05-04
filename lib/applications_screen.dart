@@ -59,20 +59,30 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(12),
-                        title: Text(j?["title"] ?? "", style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text("${j?["category"] ?? ""} • ${j?["location"] ?? ""}"),
-                        trailing: Container(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text(j?["title"] ?? "", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15))),
+                        Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
                             color: _statusColor(status).withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: _statusColor(status), width: 1.5),
                           ),
-                          child: Text(status.toUpperCase(), style: TextStyle(color: _statusColor(status), fontSize: 13, fontWeight: FontWeight.bold)),
+                          child: Text(status.toUpperCase(), style: TextStyle(color: _statusColor(status), fontSize: 12, fontWeight: FontWeight.bold)),
                         ),
-                      ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text("${j?["category"] ?? ""} • ${j?["location"] ?? ""}", style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
                     );
                   },
                 ),
