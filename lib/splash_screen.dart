@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
@@ -54,6 +55,12 @@ class _SplashScreenState extends State<SplashScreen>
     if (mounted) _textController.forward();
     await Future.delayed(const Duration(milliseconds: 1200));
     if (mounted) await _exitController.forward();
+    // Pre-cache onboarding images
+    await Future.wait([
+      precacheImage(CachedNetworkImageProvider('https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.jpg'), context),
+      precacheImage(CachedNetworkImageProvider('https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000f32c71f7b60152098e305915.jpg'), context),
+      precacheImage(CachedNetworkImageProvider('https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_00000000d09871f7947fe7156df8be3e.jpg'), context),
+    ]).catchError((_) {});
     final prefs = await SharedPreferences.getInstance();
     final onboardingDone = prefs.getBool('onboarding_done') ?? false;
     final session = Supabase.instance.client.auth.currentSession;
