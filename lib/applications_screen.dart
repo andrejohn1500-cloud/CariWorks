@@ -66,11 +66,11 @@ class _ApplicationsScreenState extends State<ApplicationsScreen> {
                         trailing: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: _statusColor(status).withValues(alpha: 0.1),
+                            color: _statusColor(status).withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: _statusColor(status)),
+                            border: Border.all(color: _statusColor(status), width: 1.5),
                           ),
-                          child: Text(status, style: TextStyle(color: _statusColor(status), fontSize: 12, fontWeight: FontWeight.w600)),
+                          child: Text(status.toUpperCase(), style: TextStyle(color: _statusColor(status), fontSize: 13, fontWeight: FontWeight.bold)),
                         ),
                       ),
                     );
