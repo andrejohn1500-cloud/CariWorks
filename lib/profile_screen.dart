@@ -251,6 +251,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+        if ((_profile?['avg_rating'] ?? 0.0) > 0)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '\${((_profile!["avg_rating"] ?? 0.0) as num).toStringAsFixed(1)} rating',
+                  style: const TextStyle(fontSize: 13, color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
