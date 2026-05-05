@@ -286,6 +286,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
     final listingId = widget.application['listing_id'];
     final reviewerId = supabase.auth.currentUser?.id;
 
+    final outerContext = context;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -347,12 +348,10 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                       final avg = rows.map((r) => r['rating'] as int).reduce((a, b) => a + b) / rows.length;
                       await supabase.from('profiles').update({'avg_rating': avg}).eq('id', revieweeId);
                     }
-                    if (mounted) {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Rating submitted!'), backgroundColor: Colors.green),
-                      );
-                    }
+                    if (mounted) Navigator.pop(outerContext);
+                    ScaffoldMessenger.of(outerContext).showSnackBar(
+                      const SnackBar(content: Text('Rating submitted!'), backgroundColor: Colors.green),
+                    );
                   },
                   child: const Text('Submit Rating', style: TextStyle(color: Colors.white)),
                 ),
