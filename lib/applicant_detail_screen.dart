@@ -285,6 +285,14 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
     final revieweeId = widget.application['user_id'];
     final listingId = widget.application['listing_id'];
     final reviewerId = supabase.auth.currentUser?.id;
+    final revieweeId2 = widget.application['user_id'];
+    debugPrint('DEBUG: reviewerId=$reviewerId revieweeId=$revieweeId2');
+    if (reviewerId == null) {
+      ScaffoldMessenger.of(outerContext).showSnackBar(
+        const SnackBar(content: Text('Not logged in - cannot rate'), backgroundColor: Colors.red),
+      );
+      return;
+    }
 
     final outerContext = context;
     showModalBottomSheet(
