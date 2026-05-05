@@ -296,7 +296,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
         builder: (context, setModalState) => Padding(
           padding: EdgeInsets.only(
             left: 24, right: 24, top: 24,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom + 32,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
