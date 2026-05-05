@@ -275,11 +275,6 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                     ),
                   ),
               ]),
-                    onPressed: () => _showRatingSheet(),
-                  ),
-                ),
-              ),
-            ),
     );
   }
   void _showRatingSheet() {
