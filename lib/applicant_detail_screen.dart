@@ -262,4 +262,89 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
             ),
     );
   }
+  void _showRatingSheet() {
+    int _selectedRating = 0;
+    final TextEditingController _reviewController = TextEditingController();
+    final supabase = Supabase.instance.client;
+    final revieweeId = widget.application['applicant_id'];
+    final listingId = widget.application['listing_id'];
+    final reviewerId = supabase.auth.currentUser?.id;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) => Padding(
+          padding: EdgeInsets.only(
+            left: 24, right: 24, top: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Rate this Applicant', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (i) => IconButton(
+                  icon: Icon(
+                    i < _selectedRating ? Icons.star : Icons.star_border,
+                    color: Colors.amber, size: 36,
+                  ),
+                  onPressed: () => setModalState(() => _selectedRating = i + 1),
+                )),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _reviewController,
+                maxLines: 3,
+                decoration: const InputDecoration(
+                  hintText: 'Write a review (optional)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF0A3D62),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  onPressed: _selectedRating == 0 ? null : () async {
+                    await supabase.from('ratings').insert({
+                      'reviewer_id': reviewerId,
+                      'reviewee_id': revieweeId,
+                      'listing_id': listingId,
+                      'rating': _selectedRating,
+                      'review': _reviewController.text.trim(),
+                    });
+                    final rows = await supabase
+                        .from('ratings')
+                        .select('rating')
+                        .eq('reviewee_id', revieweeId);
+                    if (rows.isNotEmpty) {
+                      final avg = rows.map((r) => r['rating'] as int).reduce((a, b) => a + b) / rows.length;
+                      await supabase.from('profiles').update({'avg_rating': avg}).eq('id', revieweeId);
+                    }
+                    if (mounted) {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Rating submitted!'), backgroundColor: Colors.green),
+                      );
+                    }
+                  },
+                  child: const Text('Submit Rating', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }
