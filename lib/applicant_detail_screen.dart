@@ -258,6 +258,22 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                   )),
                 ]),
                 const SizedBox(height: 24),
+                if (appStatus == 'accepted')
+                  SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+                        label: const Text('Mark as Completed', style: TextStyle(color: Colors.white)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2E7D32),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        onPressed: () => _showRatingSheet(),
+                      ),
+                    ),
+                  ),
               ]),
             ),
     );
