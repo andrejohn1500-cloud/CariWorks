@@ -282,7 +282,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
     int _selectedRating = 0;
     final TextEditingController _reviewController = TextEditingController();
     final supabase = Supabase.instance.client;
-    final revieweeId = widget.application['applicant_id'];
+    final revieweeId = widget.application['user_id'];
     final listingId = widget.application['listing_id'];
     final reviewerId = supabase.auth.currentUser?.id;
 
