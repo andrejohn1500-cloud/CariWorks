@@ -360,6 +360,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                     ScaffoldMessenger.of(outerContext).showSnackBar(
                       const SnackBar(content: Text('Rating submitted!'), backgroundColor: Colors.green),
                     );
+                    } catch (e) { ScaffoldMessenger.of(outerContext).showSnackBar(SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red)); }
                   },
                   child: const Text('Submit Rating', style: TextStyle(color: Colors.white)),
                 ),
