@@ -349,14 +349,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                       'stars': _selectedRating,
                       'review_text': _reviewController.text.trim(),
                     });
-                    final rows = await supabase
-                        .from('ratings')
-                        .select('stars')
-                        .eq('reviewee_id', revieweeId);
-                    if (rows.isNotEmpty) {
-                      final avg = rows.map((r) => r['stars'] as int).reduce((a, b) => a + b) / rows.length;
-                      await supabase.from('profiles').update({'avg_rating': avg}).eq('id', revieweeId);
-                    }
+                await supabase.rpc('update_avg_rating', params: {'p_user_id': revieweeId});
                     if (mounted) Navigator.pop(outerContext);
                     ScaffoldMessenger.of(outerContext).showSnackBar(
                       const SnackBar(content: Text('Rating submitted!'), backgroundColor: Colors.green),
