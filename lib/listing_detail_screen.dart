@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'apply_form.dart';
+import 'chat_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'chat_screen.dart';
 
 class ListingDetailScreen extends StatefulWidget {
   final Map<String, dynamic> listing;
@@ -132,6 +134,25 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
             Text(widget.listing['description'] ?? 'No description provided.',
                 style: const TextStyle(fontSize: 14, color: Color(0xFF636E72), height: 1.6)),
             const SizedBox(height: 32),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.chat_bubble_outline, size: 18),
+              label: const Text('Message'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF5B8DB8),
+                side: const BorderSide(color: Color(0xFF5B8DB8)),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                minimumSize: const Size(double.infinity, 48),
+              ),
+              onPressed: () {
+                final user = Supabase.instance.client.auth.currentUser;
+                if (user == null) { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sign in to message'))); return; }
+                final posterId = widget.listing['user_id'] ?? '';
+                if (posterId == user.id) { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('This is your own listing'))); return; }
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ChatScreen(conversationPartnerId: posterId, partnerName: widget.listing['company'] ?? 'User', listingId: widget.listing['id'] ?? '', listingTitle: widget.listing['title'] ?? '')));
+              },
+            ),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
