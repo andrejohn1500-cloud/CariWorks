@@ -163,30 +163,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                       if (coverLetter.isNotEmpty) ...[
                         const Text('Cover Letter', style: TextStyle(fontSize: 12, color: Colors.grey)),
                         const SizedBox(height: 4),
-                        if (_isPremiumPost)
                           Padding(padding: const EdgeInsets.only(bottom: 16), child: Text(coverLetter, style: const TextStyle(fontSize: 15)))
-                        else
-                          GestureDetector(
-                            onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                              content: Text('Upgrade to Premium Post to read cover letters'),
-                              backgroundColor: Color(0xFF5B8DB8),
-                            )),
-                            child: Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(bottom: 16),
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-                              ),
-                              child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                Icon(Icons.lock_outline, color: Colors.grey),
-                                SizedBox(width: 8),
-                                Text('Upgrade to Premium Post to unlock', style: TextStyle(color: Colors.grey)),
-                              ]),
-                            ),
-                          ),
                       ],
                       if (portfolioUrl.isNotEmpty) _field('Portfolio', portfolioUrl),
                       if (certifications.isNotEmpty) _field('Certifications', certifications),
@@ -196,7 +173,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                 const SizedBox(height: 16),
 
                 // Contact / Premium gate
-                if (_isPremiumPost && (email.isNotEmpty || phone.isNotEmpty))
+                if ((email.isNotEmpty || phone.isNotEmpty))
                   Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: Padding(
@@ -228,27 +205,6 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                       ]),
                     ),
                   )
-                else if (!_isPremiumPost)
-                  Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(children: [
-                        const Icon(Icons.lock_outline, size: 40, color: Colors.grey),
-                        const SizedBox(height: 8),
-                        const Text('Upgrade to Premium Post', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        const SizedBox(height: 4),
-                        const Text('Unlock full contact details and cover letters',
-                            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 13)),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF5B8DB8)),
-                          onPressed: () async { await launchUrl(Uri.parse('https://www.paypal.com/ncp/payment/359PF493G56BG'), mode: LaunchMode.externalApplication); },
-                          child: const Text('Upgrade (\$10)', style: TextStyle(color: Colors.white)),
-                        ),
-                      ]),
-                    ),
-                  ),
                 const SizedBox(height: 16),
 
                 // Accept / Reject
