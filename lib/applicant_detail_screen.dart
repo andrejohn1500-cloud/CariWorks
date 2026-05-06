@@ -38,7 +38,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
       final applicantId = widget.application['user_id'] ?? '';
       if (applicantId.isNotEmpty) {
         final listingTitle = widget.application['listing_title'] ?? 'your application';
-        await supabase.from('notifications').insert({
+        await Supabase.instance.client.from('notifications').insert({
           'user_id': applicantId,
           'title': status == 'accepted' ? 'Application Accepted! 🎉' : 'Application Update',
           'body': status == 'accepted' ? 'Congratulations! Your application for $listingTitle has been accepted.' : 'Your application for $listingTitle was not selected this time.',
