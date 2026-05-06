@@ -346,15 +346,15 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                       'reviewer_id': reviewerId,
                       'reviewee_id': revieweeId,
                       'listing_id': listingId,
-                      'rating': _selectedRating,
-                      'review': _reviewController.text.trim(),
+                      'stars': _selectedRating,
+                      'review_text': _reviewController.text.trim(),
                     });
                     final rows = await supabase
                         .from('ratings')
-                        .select('rating')
+                        .select('stars')
                         .eq('reviewee_id', revieweeId);
                     if (rows.isNotEmpty) {
-                      final avg = rows.map((r) => r['rating'] as int).reduce((a, b) => a + b) / rows.length;
+                      final avg = rows.map((r) => r['stars'] as int).reduce((a, b) => a + b) / rows.length;
                       await supabase.from('profiles').update({'avg_rating': avg}).eq('id', revieweeId);
                     }
                     if (mounted) Navigator.pop(outerContext);
