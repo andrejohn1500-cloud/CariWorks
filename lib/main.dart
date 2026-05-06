@@ -77,6 +77,7 @@ class _CariJobsAppState extends State<CariJobsApp> {
           primary: const Color(0xFF5B8DB8),
           secondary: const Color(0xFFD4A843),
           surface: const Color(0xFFFFFFFF),
+          canvasColor: const Color(0xFFFFFAF5),
         ),
         scaffoldBackgroundColor: const Color(0xFFFAF8F5),
         useMaterial3: true,
