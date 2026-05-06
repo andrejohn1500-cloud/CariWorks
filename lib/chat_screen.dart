@@ -33,6 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _fetchMessages();
     _markRead();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showChatRules());
   }
 
   @override
@@ -81,6 +82,29 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  void _showChatRules() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Chat Guidelines'),
+        content: const Text(
+          'Keep conversations respectful and professional.\n\n'
+          '• No profanity or hate speech\n'
+          '• No threats or harassment\n'
+          '• No illegal activity\n'
+          '• Never share passwords or send payments outside CariWorks\n\n'
+          '3 violations will result in account suspension.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('I Understand'),
+          ),
+        ],
+      ),
+    );
+  }
+
   bool _containsBannedWords(String text) {
     const banned = [
       'fuck', 'shit', 'bitch', 'asshole', 'nigger', 'nigga', 'faggot', 'cunt',
@@ -123,7 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Warning \$_strikes/3: Message blocked — community guidelines violation.'),
+          content: Text('Warning $_strikes/3: Message blocked — community guidelines violation.'),
           backgroundColor: Colors.orange,
           duration: const Duration(seconds: 4),
         ),
