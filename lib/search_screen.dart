@@ -46,25 +46,25 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       final cutoff = DateTime.now().subtract(const Duration(hours: 24)).toIso8601String();
       final jobs = widget.recentOnly
           ? await Supabase.instance.client
-              .from('listings').select().eq('type', 'Employer')
+              .from('listings').select('*, profiles(avg_rating, rating_count)').eq('type', 'Employer')
               .gte('created_at', cutoff)
               .order('featured', ascending: false)
         .order('is_premium', ascending: false)
         .order('created_at', ascending: false)
           : await Supabase.instance.client
-              .from('listings').select().eq('type', 'Employer')
+              .from('listings').select('*, profiles(avg_rating, rating_count)').eq('type', 'Employer')
               .order('featured', ascending: false)
         .order('is_premium', ascending: false)
         .order('created_at', ascending: false);
       final gigs = widget.recentOnly
         ? await Supabase.instance.client
-            .from('listings').select().eq('type', 'Worker / Freelancer')
+            .from('listings').select('*, profiles(avg_rating, rating_count)').eq('type', 'Worker / Freelancer')
             .gte('created_at', cutoff)
             .order('featured', ascending: false)
         .order('is_premium', ascending: false)
         .order('created_at', ascending: false)
         : await Supabase.instance.client
-            .from('listings').select().eq('type', 'Worker / Freelancer')
+            .from('listings').select('*, profiles(avg_rating, rating_count)').eq('type', 'Worker / Freelancer')
             .order('featured', ascending: false)
         .order('is_premium', ascending: false)
         .order('created_at', ascending: false);
@@ -212,6 +212,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       ]),
       const SizedBox(height: 6),
       Text(j['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
+            if ((j['profiles']?['avg_rating'] ?? 0) > 0) Row(children: [const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72)))]),
     ]),
   ));
 
@@ -247,6 +248,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         const Icon(Icons.star_rounded, size: 14, color: Color(0xFFD4A843)),
         const SizedBox(width: 3),
         Text(g['job_type'] ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            if ((g['profiles']?['avg_rating'] ?? 0) > 0) Row(children: [const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${(g['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${g['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72)))]),
         const Spacer(),
         Text(g['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF5B8DB8))),
       ]),
