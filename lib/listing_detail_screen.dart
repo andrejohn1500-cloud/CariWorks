@@ -14,11 +14,14 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
   bool _isSaved = false;
   bool _isApplied = false;
   String _applicationStatus = '';
+  double _avgRating = 0.0;
+  int _ratingCount = 0;
 
   @override
   void initState() {
     super.initState();
     _checkIfApplied();
+    _loadPosterRating();
   }
 
   Future<void> _checkIfApplied() async {
@@ -36,6 +39,13 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
         _isApplied = list.isNotEmpty;
         _applicationStatus = list.isNotEmpty ? (list[0]['status'] ?? 'pending') : '';
       });
+  }
+
+  Future<void> _loadPosterRating() async {
+    final posterId = widget.listing['user_id'] ?? '';
+    if (posterId.isEmpty) return;
+    final res = await Supabase.instance.client.from('profiles').select('avg_rating, rating_count').eq('id', posterId).single();
+    if (mounted) setState(() { _avgRating = (res['avg_rating'] ?? 0).toDouble(); _ratingCount = res['rating_count'] ?? 0; });
   }
 
   Future<void> _saveJob() async {
@@ -107,7 +117,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
             const SizedBox(height: 8),
             Text(widget.listing['company'] ?? widget.listing['user_id'] ?? '',
               style: const TextStyle(fontSize: 16, color: Color(0xFF636E72))),
-            if (avgRating > 0) Row(children: [const Icon(Icons.star, size: 13, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${avgRating.toStringAsFixed(1)} (${profile?['rating_count'] ?? 0} reviews)', style: const TextStyle(fontSize: 12, color: Color(0xFF636E72)))]),
+            if (_avgRating > 0) Row(children: [const Icon(Icons.star, size: 13, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${ _avgRating.toStringAsFixed(1)} ($_ratingCount reviews)', style: const TextStyle(fontSize: 12, color: Color(0xFF636E72)))]),
             const SizedBox(height: 16),
             _infoRow(Icons.location_on_outlined, widget.listing['location'] ?? 'Location not specified'),
             const SizedBox(height: 8),
