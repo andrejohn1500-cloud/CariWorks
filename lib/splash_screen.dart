@@ -64,11 +64,25 @@ class _SplashScreenState extends State<SplashScreen>
     final prefs = await SharedPreferences.getInstance();
     final onboardingDone = prefs.getBool('onboarding_done') ?? false;
     final session = Supabase.instance.client.auth.currentSession;
+    bool isSuspended = false;
+    if (session != null) {
+      try {
+        final profile = await Supabase.instance.client
+            .from('profiles')
+            .select('is_suspended')
+            .eq('id', session.user.id)
+            .single();
+        isSuspended = profile['is_suspended'] == true;
+      } catch (_) {}
+    }
+    if (isSuspended) {
+      await Supabase.instance.client.auth.signOut();
+    }
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-      builder: (_) => !onboardingDone ? const OnboardingScreen()
-            : session != null ? const HomeScreen() : const LoginScreen(),
+        builder: (_) => !onboardingDone ? const OnboardingScreen()
+            : (session != null && !isSuspended) ? const HomeScreen() : const LoginScreen(),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'login_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final String conversationPartnerId;
@@ -25,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _scrollCtrl = ScrollController();
   List<Map<String, dynamic>> _messages = [];
   bool _loading = true;
+  int _strikes = 0;
 
   @override
   void initState() {
@@ -79,11 +81,55 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  bool _containsBannedWords(String text) {
+    const banned = [
+      'fuck', 'shit', 'bitch', 'asshole', 'nigger', 'nigga', 'faggot', 'cunt',
+      'kill you', 'kill him', 'kill her', 'i will kill', 'gonna kill', 'murder',
+      'rape', 'bomb', 'terrorist', 'cocaine', 'heroin', 'drug deal',
+      'hate you', 'shoot you', 'stab you',
+    ];
+    final lower = text.toLowerCase();
+    return banned.any((w) => lower.contains(w));
+  }
+
+  Future<void> _suspendUser(String userId) async {
+    await _supabase.from('profiles').update({'is_suspended': true}).eq('id', userId);
+    await _supabase.auth.signOut();
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (_) => false,
+      );
+    }
+  }
+
   Future<void> _send() async {
     final text = _ctrl.text.trim();
     if (text.isEmpty) return;
     final me = _supabase.auth.currentUser?.id;
     if (me == null) return;
+    if (_containsBannedWords(text)) {
+      _strikes++;
+      if (_strikes >= 3) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your account has been suspended for violating community guidelines.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        await _suspendUser(me);
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Warning \$_strikes/3: Message blocked — community guidelines violation.'),
+          backgroundColor: Colors.orange,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+      return;
+    }
     _ctrl.clear();
     await _supabase.from('messages').insert({
       'listing_id': widget.listingId,
