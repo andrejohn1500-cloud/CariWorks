@@ -340,6 +340,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () async {
+                try {
                     if (_selectedRating == 0) { ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select a star rating'))); return; }
                     await supabase.from('ratings').insert({
                       'reviewer_id': reviewerId,
