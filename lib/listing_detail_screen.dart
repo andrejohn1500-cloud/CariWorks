@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'apply_form.dart';
 import 'chat_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'chat_screen.dart';
 
 class ListingDetailScreen extends StatefulWidget {
   final Map<String, dynamic> listing;
