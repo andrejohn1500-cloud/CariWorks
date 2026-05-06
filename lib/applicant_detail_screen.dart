@@ -204,7 +204,7 @@ class _ApplicantDetailScreenState extends State<ApplicantDetailScreen> {
                         ]),
                       ]),
                     ),
-                  )
+                  ),
                 const SizedBox(height: 16),
 
                 // Accept / Reject
