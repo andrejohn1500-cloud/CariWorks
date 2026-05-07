@@ -80,9 +80,11 @@ class _SplashScreenState extends State<SplashScreen>
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => !onboardingDone ? const OnboardingScreen()
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => !onboardingDone ? const OnboardingScreen()
             : (session != null && !isSuspended) ? const HomeScreen() : const LoginScreen(),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
       ),
     );
   }
