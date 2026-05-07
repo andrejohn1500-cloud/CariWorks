@@ -38,7 +38,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _precacheImages() async {
-    await Future.wait(_slides.map((s) => precacheImage(
+    for (final s in _slides) {
+    }
     if (mounted) setState(() => _imagesReady = true);
   }
 
