@@ -118,7 +118,7 @@ class _ListingDetailScreenState extends State<ListingDetailScreen> {
             const SizedBox(height: 8),
             Text(widget.listing['company'] ?? widget.listing['user_id'] ?? '',
               style: const TextStyle(fontSize: 16, color: Color(0xFF636E72))),
-            if (_avgRating > 0) Row(children: [const Icon(Icons.star, size: 13, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${ _avgRating.toStringAsFixed(1)} ($_ratingCount reviews)', style: const TextStyle(fontSize: 12, color: Color(0xFF636E72)))]),
+            if (_avgRating > 0) Row(children: [const Icon(Icons.star, size: 13, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${ _avgRating.toStringAsFixed(1)} ($_ratingCount ${_ratingCount == 1 ? "review" : "reviews"})', style: const TextStyle(fontSize: 12, color: Color(0xFF636E72)))]),
             const SizedBox(height: 16),
             _infoRow(Icons.location_on_outlined, widget.listing['location'] ?? 'Location not specified'),
             const SizedBox(height: 8),
