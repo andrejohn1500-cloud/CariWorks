@@ -70,7 +70,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
     try {
       final jobs = await Supabase.instance.client
           .from('listings')
-          .select()
+        .select('*, profiles(avg_rating, rating_count)')
           .eq('type', 'Job')
           .order('featured', ascending: false)
         .order('is_premium', ascending: false)
@@ -78,7 +78,7 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
           .limit(5);
         final gigs = await Supabase.instance.client
             .from('listings')
-            .select()
+        .select('*, profiles(avg_rating, rating_count)')
             .eq('type', 'Worker / Freelancer')
             .eq('featured', true)
             .order('featured', ascending: false)
@@ -425,6 +425,14 @@ class _HomeFeedTabState extends State<HomeFeedTab> {
           ),
           const SizedBox(height: 4),
           Text(j['company'] ?? '', style: const TextStyle(color: Color(0xFF707D89), fontSize: 13)),
+              if ((j['profiles']?['avg_rating'] ?? 0) > 0) Padding(
+                padding: const EdgeInsets.only(top: 2, bottom: 2),
+                child: Row(children: [
+                  const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)),
+                  const SizedBox(width: 3),
+                  Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
+                ]),
+              ),
           const SizedBox(height: 10),
           Row(
             children: [
