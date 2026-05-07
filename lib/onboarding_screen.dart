@@ -11,6 +11,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _currentPage = 0;
+  bool _imagesReady = false;
 
   final List<Map<String, String>> _slides = [
     {
@@ -30,6 +31,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _precacheImages();
+  }
+
+  Future<void> _precacheImages() async {
+    await Future.wait(_slides.map((s) => precacheImage(
+    if (mounted) setState(() => _imagesReady = true);
+  }
+
   Future<void> _finish() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_done', true);
@@ -38,6 +50,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_imagesReady) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF1565C0),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/hero_image.png', width: 90, height: 90),
+              const SizedBox(height: 20),
+              const Text('CariWorks', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              const Text('Caribbean Jobs & Gigs', style: TextStyle(color: Colors.white70, fontSize: 14)),
+              const SizedBox(height: 40),
+              const CircularProgressIndicator(color: Colors.white),
+            ],
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: const Color(0xFF1A1A2E),
       body: SafeArea(
