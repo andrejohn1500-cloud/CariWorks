@@ -210,13 +210,16 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         const Spacer(),
         Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: const Color(0xFF5B8DB8).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)), child: Text(j['job_type'] ?? '', style: const TextStyle(fontSize: 11, color: Color(0xFF5B8DB8), fontWeight: FontWeight.w600))),
       ]),
+              if ((j['profiles']?['avg_rating'] ?? 0) > 0) Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(children: [
+                  const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)),
+                  const SizedBox(width: 3),
+                  Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
+                ]),
+              ),
       const SizedBox(height: 6),
       Text(j['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-            if ((j['profiles']?['avg_rating'] ?? 0) > 0) Row(children: [const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72)))]),
-    ]),
-  ));
-
-  Widget _buildGigCard(Map<String, dynamic> g) => GestureDetector(
     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ListingDetailScreen(listing: g))),
     child: Container(
     margin: const EdgeInsets.only(bottom: 12),
