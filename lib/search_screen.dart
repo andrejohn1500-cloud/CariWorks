@@ -212,7 +212,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       ]),
       const SizedBox(height: 6),
       Text(j['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF2D3436))),
-            if ((j['profiles']?['avg_rating'] ?? 0) > 0) Row(children: [const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72)))]),
+            if ((j['profiles']?['avg_rating'] ?? 0) > 0) Row(children: [const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)), const SizedBox(width: 3), Text('${(j['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${j['profiles']['rating_count']} ${(j['profiles']['rating_count'] == 1) ? 'review' : 'reviews'})', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72)))]),
     ]),
   ));
 
@@ -256,7 +256,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                 child: Row(children: [
                   const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)),
                   const SizedBox(width: 3),
-                  Text('${(g['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${g['profiles']['rating_count']} reviews)', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
+                  Text('${(g['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${g['profiles']['rating_count']} ${(g['profiles']['rating_count'] == 1) ? 'review' : 'reviews'})', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
                 ]),
               ),
     ]),
