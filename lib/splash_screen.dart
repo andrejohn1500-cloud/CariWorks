@@ -54,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 500));
     if (mounted) _textController.forward();
     await Future.delayed(const Duration(milliseconds: 1200));
-    if (mounted) await _exitController.forward();
     // Pre-cache onboarding images
     await Future.wait([
       precacheImage(CachedNetworkImageProvider('https://ajprjkpjjkppcphjvccv.supabase.co/storage/v1/object/public/onboarding/file_0000000020a471f793f01f5fb6403f07.jpg'), context),
@@ -99,9 +98,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _exitAnim,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: const Color(0xFF1565C0),
         body: Center(
           child: Column(
@@ -168,7 +165,6 @@ class _SplashScreenState extends State<SplashScreen>
             ],
           ),
         ),
-      ),
     );
   }
 }
