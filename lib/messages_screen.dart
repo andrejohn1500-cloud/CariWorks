@@ -230,6 +230,7 @@ class _ChatScreenState extends State<_ChatScreen> {
             child: _loading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
+            reverse: true,
                     padding: const EdgeInsets.all(16),
                     itemCount: _messages.length,
                     itemBuilder: (context, i) {
