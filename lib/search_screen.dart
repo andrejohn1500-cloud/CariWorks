@@ -244,8 +244,6 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       Text(g['company'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF636E72))),
       const SizedBox(height: 8),
       Row(children: [
-        const Icon(Icons.star_rounded, size: 14, color: Color(0xFFD4A843)),
-        const SizedBox(width: 3),
         Text(g['job_type'] ?? '', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
         const Spacer(),
         Text(g['salary'] ?? '', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF5B8DB8))),
