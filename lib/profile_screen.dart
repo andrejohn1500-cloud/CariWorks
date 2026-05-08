@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Icon(Icons.star, color: Colors.amber, size: 16),
                 const SizedBox(width: 4),
                 Text(
-                  '\${((_profile!["avg_rating"] ?? 0.0) as num).toStringAsFixed(1)} rating',
+                  "${((_profile!["avg_rating"] ?? 0.0) as num).toStringAsFixed(1)} rating",
                   style: const TextStyle(fontSize: 13, color: Colors.black54),
                 ),
               ],

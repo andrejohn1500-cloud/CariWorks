@@ -203,6 +203,7 @@ class _ChatScreenState extends State<_ChatScreen> {
   Widget build(BuildContext context) {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFFFFFFAF5),
       appBar: AppBar(
         backgroundColor: Colors.white,
