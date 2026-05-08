@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "589163117004",
+    "project_id": "cariworks-dce58",
+    "storage_bucket": "cariworks-dce58.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589163117004:android:6c7fc5eb06cc862dd40569",
+        "android_client_info": {
+          "package_name": "com.dresapps.cariworks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC401R1UALSMm95Q6WcnGkD9sEE7XUt-bM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

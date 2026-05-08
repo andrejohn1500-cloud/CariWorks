@@ -9,6 +9,9 @@ import 'login_screen.dart';
 import 'register_screen.dart';
 import 'account_type_screen.dart';
 import 'home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'services/notification_service.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
