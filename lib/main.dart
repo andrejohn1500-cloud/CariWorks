@@ -21,6 +21,8 @@ void main() async {
     url: supabaseUrl,
     anonKey: supabaseAnonKey,
   );
+  await Firebase.initializeApp();
+  await NotificationService.initialize();
   runApp(const CariJobsApp());
 }
 
