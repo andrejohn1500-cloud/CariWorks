@@ -231,7 +231,7 @@ class _ChatScreenState extends State<_ChatScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
             reverse: true,
-                    padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16 + MediaQuery.of(context).padding.bottom),
                     itemCount: _messages.length,
                     itemBuilder: (context, i) {
                       final msg = _messages[i];
