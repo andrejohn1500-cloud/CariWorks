@@ -253,7 +253,6 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
               if ((g['profiles']?['avg_rating'] ?? 0) > 0) Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Row(children: [
-                  const Icon(Icons.star, size: 12, color: Color(0xFFFFB800)),
                   const SizedBox(width: 3),
                   Text('${(g['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${g['profiles']['rating_count']} ${(g['profiles']['rating_count'] == 1) ? 'review' : 'reviews'})', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
                 ]),
