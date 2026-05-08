@@ -144,7 +144,7 @@ class _ApplyFormState extends State<ApplyForm> {
               // Cover Letter
               _requiredLabel('Cover Letter'),
               const SizedBox(height: 4),
-              const Text('Tell the employer why you\'re the right fit', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              Text(widget.listing['type'] == 'Job' ? 'Tell the employer why you\'re the right fit' : 'Tell the service provider why you\'d like to hire them', style: const TextStyle(color: Colors.grey, fontSize: 12)),
               const SizedBox(height: 8),
               TextField(
                 controller: _coverLetterCtrl,
