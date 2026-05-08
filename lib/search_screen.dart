@@ -194,7 +194,6 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.star, size: 11, color: Colors.white),
                       SizedBox(width: 3),
                       Text('Featured', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
                     ],
@@ -259,6 +258,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                   Text('${(g['profiles']['avg_rating'] as num).toStringAsFixed(1)} (${g['profiles']['rating_count']} ${(g['profiles']['rating_count'] == 1) ? 'review' : 'reviews'})', style: const TextStyle(fontSize: 11, color: Color(0xFF636E72))),
                 ]),
               ),
+grep -n "Icons.star" lib/home_screen.dart | head -20
     ]),
   ));
 }
